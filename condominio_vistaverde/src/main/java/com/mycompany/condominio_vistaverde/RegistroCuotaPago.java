@@ -4,6 +4,9 @@
  */
 package com.mycompany.condominio_vistaverde;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author LENOVO
@@ -16,8 +19,73 @@ public class RegistroCuotaPago extends javax.swing.JFrame {
      * Creates new form RegistroCuotaPago
      */
     public RegistroCuotaPago() {
-        initComponents();
+
+            initComponents();
+
+    txtCuota.setEditable(false);
+    txtCuota.setText("Q.1500.00");
+
+    CargarCasas();
+    CargarMeses();
+    CargarAños();
     }
+    
+   private void CargarCasas() {
+
+    DefaultComboBoxModel<String> modelo =
+            new DefaultComboBoxModel<>();
+
+    modelo.addElement("Seleccionar");
+
+    for (int i = 1; i <= 30; i++) {
+        modelo.addElement("CASA " + i);
+    }
+
+    cmbCasas.setModel(modelo);
+}
+    
+     private void CargarMeses() {
+
+    cmbMes.removeAllItems();
+
+    cmbMes.addItem("Seleccionar");
+
+    cmbMes.addItem("Enero");
+    cmbMes.addItem("Febrero");
+    cmbMes.addItem("Marzo");
+    cmbMes.addItem("Abril");
+    cmbMes.addItem("Mayo");
+    cmbMes.addItem("Junio");
+    cmbMes.addItem("Julio");
+    cmbMes.addItem("Agosto");
+    cmbMes.addItem("Septiembre");
+    cmbMes.addItem("Octubre");
+    cmbMes.addItem("Noviembre");
+    cmbMes.addItem("Diciembre");
+}
+    
+    private void CargarAños() {
+    cmbAño.removeAllItems();
+cmbAño.addItem("Seleccionar");
+    cmbAño.addItem("2025");
+   cmbAño.addItem("2026");
+    cmbAño.addItem("2027");
+    cmbAño.addItem("2028");
+}
+    
+    private void validarCombos() {
+
+    String casa = cmbCasas.getSelectedItem().toString();
+    String mes = cmbMes.getSelectedItem().toString();
+    String anio = cmbAño.getSelectedItem().toString();
+
+    boolean habilitar =
+            !casa.equals("Seleccionar")
+            && !mes.equals("Seleccionar")
+            && !anio.equals("Seleccionar");
+
+    btnPago.setEnabled(habilitar);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,21 +96,172 @@ public class RegistroCuotaPago extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        cmbMes = new javax.swing.JComboBox<>();
+        cmbAño = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        btnPago = new javax.swing.JButton();
+        txtCuota = new javax.swing.JTextField();
+        cmbCasas = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("jLabel1");
+
+        jLabel2.setText("jLabel2");
+
+        cmbMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbMes.addActionListener(this::cmbMesActionPerformed);
+
+        cmbAño.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbAño.addActionListener(this::cmbAñoActionPerformed);
+
+        jLabel3.setText("jLabel3");
+
+        jLabel4.setText("jLabel4");
+
+        btnPago.setText("Aplicar Pago");
+        btnPago.addActionListener(this::btnPagoActionPerformed);
+
+        cmbCasas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbCasas.addActionListener(this::cmbCasasActionPerformed);
+
+        jButton2.setText("volvermenu");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(84, 84, 84)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(74, 74, 74)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(94, 94, 94)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cmbCasas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45)
+                                .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(cmbAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtCuota, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(111, 111, 111)
+                                .addComponent(btnPago, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 23, Short.MAX_VALUE)))))
+                .addGap(101, 101, 101))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCuota, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbCasas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPago, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
+String casa = cmbCasas.getSelectedItem().toString();
+    String mes = cmbMes.getSelectedItem().toString();
+    String anio = cmbAño.getSelectedItem().toString();
+    String cuota = "1500";
+
+    if (BDXML.existePago(casa, mes, anio)) {
+
+        JOptionPane.showMessageDialog(this,
+                "Ya existe un pago registrado para "
+                + casa + " en "
+                + mes + " del año "
+                + anio
+                + ".\nNo se puede duplicar el pago.");
+
+        return;
+    }
+
+    BDXML.registrarPago(casa, mes, anio, cuota);
+
+    JOptionPane.showMessageDialog(this,
+            "Pago registrado correctamente.");
+
+    // RESET DE CONTROLES
+    cmbCasas.setSelectedIndex(0);
+    cmbMes.setSelectedIndex(0);
+    cmbAño.setSelectedIndex(0);
+
+    txtCuota.setText("1500");
+
+    // DESHABILITAR BOTÓN
+    btnPago.setEnabled(false);
+    }//GEN-LAST:event_btnPagoActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+ MenuPrincipal menu = new MenuPrincipal ();
+        menu.setVisible(true);
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void cmbCasasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCasasActionPerformed
+        validarCombos();
+    // TODO add your handling code here:
+    }//GEN-LAST:event_cmbCasasActionPerformed
+
+    private void cmbMesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMesActionPerformed
+  validarCombos();        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbMesActionPerformed
+
+    private void cmbAñoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAñoActionPerformed
+    validarCombos();        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbAñoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +289,16 @@ public class RegistroCuotaPago extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPago;
+    private javax.swing.JComboBox<String> cmbAño;
+    private javax.swing.JComboBox<String> cmbCasas;
+    private javax.swing.JComboBox<String> cmbMes;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField txtCuota;
     // End of variables declaration//GEN-END:variables
 }
