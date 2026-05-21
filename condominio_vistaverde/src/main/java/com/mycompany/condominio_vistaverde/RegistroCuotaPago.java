@@ -20,14 +20,17 @@ public class RegistroCuotaPago extends javax.swing.JFrame {
      */
     public RegistroCuotaPago() {
 
-            initComponents();
+    initComponents();
 
     txtCuota.setEditable(false);
-    txtCuota.setText("Q.1500.00");
 
+txtCuota.setText(
+        "Q." + BDXML.obtenerCuotaActual());
     CargarCasas();
     CargarMeses();
     CargarAños();
+
+    btnPago.setEnabled(false);
     }
     
    private void CargarCasas() {
@@ -67,13 +70,47 @@ public class RegistroCuotaPago extends javax.swing.JFrame {
     private void CargarAños() {
     cmbAño.removeAllItems();
 cmbAño.addItem("Seleccionar");
-    cmbAño.addItem("2025");
    cmbAño.addItem("2026");
     cmbAño.addItem("2027");
     cmbAño.addItem("2028");
 }
     
+    // Arreglo para conocer el orden lógico de los meses
+    private final String[] ORDEN_MESES = {
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    };
+
+    /**
+     * Revisa si todos los meses anteriores al mes seleccionado ya fueron pagados.
+     * Retorna el nombre del primer mes que falta por pagar, o null si todo está correcto.
+     */
+    private String obtenerMesAnteriorNoPagado(String casa, String mesSeleccionado, String anio) {
+        for (String mes : ORDEN_MESES) {
+            // Si el ciclo llega al mes que queremos pagar, significa que los anteriores están pagados
+            if (mes.equals(mesSeleccionado)) {
+                break; 
+            }
+            
+            // Verificamos si el mes anterior iterado NO existe en el XML
+            if (!BDXML.existePago(casa, mes, anio)) {
+                return mes; // Retornamos el mes que falta pagar
+            }
+        }
+        return null; // Si termina el ciclo o llega al break, todo está en orden
+    }
+    
+    
+    
+    
     private void validarCombos() {
+ if (cmbCasas.getSelectedItem() == null
+            || cmbMes.getSelectedItem() == null
+            || cmbAño.getSelectedItem() == null) {
+
+        btnPago.setEnabled(false);
+        return;
+    }
 
     String casa = cmbCasas.getSelectedItem().toString();
     String mes = cmbMes.getSelectedItem().toString();
@@ -110,9 +147,9 @@ cmbAño.addItem("Seleccionar");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("jLabel1");
+        jLabel1.setText("CASA");
 
-        jLabel2.setText("jLabel2");
+        jLabel2.setText("MES");
 
         cmbMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbMes.addActionListener(this::cmbMesActionPerformed);
@@ -120,9 +157,9 @@ cmbAño.addItem("Seleccionar");
         cmbAño.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbAño.addActionListener(this::cmbAñoActionPerformed);
 
-        jLabel3.setText("jLabel3");
+        jLabel3.setText("AÑO");
 
-        jLabel4.setText("jLabel4");
+        jLabel4.setText("CUOTA");
 
         btnPago.setText("Aplicar Pago");
         btnPago.addActionListener(this::btnPagoActionPerformed);
@@ -147,26 +184,27 @@ cmbAño.addItem("Seleccionar");
                         .addGap(74, 74, 74)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(94, 94, 94)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 151, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(cmbCasas, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cmbCasas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45)
-                                .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(19, 19, 19)
+                                .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(44, 44, 44)
-                                .addComponent(cmbAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtCuota, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(111, 111, 111)
-                                .addComponent(btnPago, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 23, Short.MAX_VALUE)))))
-                .addGap(101, 101, 101))
+                                .addComponent(btnPago, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(13, 13, 13)
+                                .addComponent(cmbAño, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtCuota, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,11 +217,11 @@ cmbAño.addItem("Seleccionar");
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbAño, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCuota, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbCasas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 190, Short.MAX_VALUE)
+                    .addComponent(cmbCasas, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(190, 190, 190)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPago, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -212,36 +250,66 @@ cmbAño.addItem("Seleccionar");
 
     private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
 String casa = cmbCasas.getSelectedItem().toString();
-    String mes = cmbMes.getSelectedItem().toString();
-    String anio = cmbAño.getSelectedItem().toString();
-    String cuota = "1500";
+        String mes = cmbMes.getSelectedItem().toString();
+        String año = cmbAño.getSelectedItem().toString();
 
-    if (BDXML.existePago(casa, mes, anio)) {
+        // OBTENER CUOTA ACTUAL DEL XML
+        String cuota = BDXML.obtenerCuotaActual();
 
-        JOptionPane.showMessageDialog(this,
-                "Ya existe un pago registrado para "
-                + casa + " en "
-                + mes + " del año "
-                + anio
-                + ".\nNo se puede duplicar el pago.");
+        // --------------------------------------------------------
+        // NUEVA VALIDACIÓN: ORDEN CRONOLÓGICO DE PAGOS
+        // --------------------------------------------------------
+        String mesFaltante = obtenerMesAnteriorNoPagado(casa, mes, año);
+        
+        if (mesFaltante != null) {
+            JOptionPane.showMessageDialog(this,
+                    "No se permite registrar el mes de " + mes + ".\n"
+                    + "Falta registrar el pago del mes de: " + mesFaltante + " del año " + año,
+                    "Pago correlativo requerido",
+                    JOptionPane.WARNING_MESSAGE);
+            return; // Detenemos la ejecución para que no proceda al pago
+        }
+        // --------------------------------------------------------
 
-        return;
-    }
+        // VALIDAR DUPLICADOS
+        if (BDXML.existePago(casa, mes, año)) {
+            JOptionPane.showMessageDialog(this,
+                    "Ya existe un pago registrado para "
+                    + casa + " en "
+                    + mes + " del año "
+                    + año
+                    + ".\nNo se puede duplicar el pago.");
+            return;
+        }
 
-    BDXML.registrarPago(casa, mes, anio, cuota);
+        // CONFIRMACIÓN
+        int respuesta = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro de registrar el pago?\n\n"
+                + "Casa: " + casa
+                + "\nMes: " + mes
+                + "\nAño: " + año
+                + "\nCuota: Q." + cuota,
+                "Confirmar pago",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
 
-    JOptionPane.showMessageDialog(this,
-            "Pago registrado correctamente.");
+        if (respuesta != JOptionPane.YES_OPTION) {
+            return;
+        }
 
-    // RESET DE CONTROLES
-    cmbCasas.setSelectedIndex(0);
-    cmbMes.setSelectedIndex(0);
-    cmbAño.setSelectedIndex(0);
+        // GUARDAR PAGO
+        BDXML.registrarPago(casa, mes, año, cuota);
 
-    txtCuota.setText("1500");
+        JOptionPane.showMessageDialog(this, "Pago registrado correctamente.");
 
-    // DESHABILITAR BOTÓN
-    btnPago.setEnabled(false);
+        // RESET
+        cmbCasas.setSelectedIndex(0);
+        cmbMes.setSelectedIndex(0);
+        cmbAño.setSelectedIndex(0);
+        txtCuota.setText("Q. " + cuota);
+        btnPago.setEnabled(false);
     }//GEN-LAST:event_btnPagoActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
