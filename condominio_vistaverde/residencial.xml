@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <residencial>
-                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                        
+    
+    
+    
+    
+    
     
     
     
@@ -53,7 +58,12 @@
     
     
     <casas/>
-                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                        
+    
+    
+    
+    
+    
     
     
     
@@ -106,7 +116,7 @@
     
     
     <pagos>
-                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                        
         
         
         
@@ -291,13 +301,198 @@
     
         
         
+        
+        
+        
+        
+        
+        <pago>
+                                                                                                
+            
+            
+            
+            
+            
+            
+            <casa>CASA 1</casa>
+                                                                                                
+            
+            
+            
+            
+            
+            
+            <mes>Enero</mes>
+                                                                                                
+            
+            
+            
+            
+            
+            
+            <año>2026</año>
+                                                                                                
+            
+            
+            
+            
+            
+            
+            <cuota>1500.00</cuota>
+                                                                                            
+        
+        
+        
+        
+        
+        
+        </pago>
+                                                            
+        
+        
+        
+        
+        
+        
+        <pago>
+                                                                                    
+            
+            
+            
+            
+            
+            <casa>CASA 1</casa>
+                                                                                    
+            
+            
+            
+            
+            
+            <mes>Febrero</mes>
+                                                                                    
+            
+            
+            
+            
+            
+            <año>2026</año>
+                                                                                    
+            
+            
+            
+            
+            
+            <cuota>1500.00</cuota>
+                                                                                
+        
+        
+        
+        
+        
+        </pago>
+                                                    
+        
+        
+        
+        
+        
+        <pago>
+                                                                        
+            
+            
+            
+            
+            <casa>CASA 1</casa>
+                                                                        
+            
+            
+            
+            
+            <mes>Marzo</mes>
+                                                                        
+            
+            
+            
+            
+            <año>2026</año>
+                                                                        
+            
+            
+            
+            
+            <cuota>1500.00</cuota>
+                                                                    
+        
+        
+        
+        
+        </pago>
+                                            
+        
+        
+        
+        
+        <pago>
+                                                            
+            
+            
+            
+            <casa>CASA 2</casa>
+                                                            
+            
+            
+            
+            <mes>Enero</mes>
+                                                            
+            
+            
+            
+            <año>2026</año>
+                                                            
+            
+            
+            
+            <cuota>1500.00</cuota>
+                                                        
+        
+        
+        
+        </pago>
+                                    
+        
+        
+        
+        <pago>
+                                                
+            
+            
+            <casa>CASA 2</casa>
+                                                
+            
+            
+            <mes>Febrero</mes>
+                                                
+            
+            
+            <año>2026</año>
+                                                
+            
+            
+            <cuota>1500.00</cuota>
+                                            
+        
+        
+        </pago>
+                            
+        
+        
         <pago>
                                     
             
-            <casa>CASA 1</casa>
+            <casa>CASA 2</casa>
                                     
             
-            <mes>Enero</mes>
+            <mes>Marzo</mes>
                                     
             
             <año>2026</año>
@@ -308,27 +503,15 @@
         
         </pago>
                     
-        
+    
         <pago>
-                        
-            <casa>CASA 1</casa>
-                        
-            <mes>Febrero</mes>
-                        
+            <casa>CASA 2</casa>
+            <mes>Abril</mes>
             <año>2026</año>
-                        
-            <cuota>1500.00</cuota>
-                    
-        </pago>
-            
-        <pago>
-            <casa>CASA 1</casa>
-            <mes>Marzo</mes>
-            <año>2026</año>
-            <cuota>1500.00</cuota>
+            <cuota>500.00</cuota>
         </pago>
     </pagos>
-                                                                                                                                                                                                                
+                                                                                                                                                                                                                                    
 
 
 
@@ -350,6 +533,11 @@
 
 
 
+    
+    
+    
+    
+    
     
     
     
@@ -381,7 +569,7 @@
     
     
     <configuracion>
-                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                
         
         
         
@@ -411,8 +599,18 @@
         
         
         
-        <cuotaActual>1500.00</cuotaActual>
-                                                                                                                                                                                                                                                    
+        
+        
+        
+        
+        
+        <cuotaActual>500.00</cuotaActual>
+                                                                                                                                                                                                                                                                                            
+    
+    
+    
+    
+    
     
     
     
@@ -443,7 +641,12 @@
     
     
     </configuracion>
-                                                                                                                        
+                                                                                                                                            
+
+
+
+
+
 
 
 
