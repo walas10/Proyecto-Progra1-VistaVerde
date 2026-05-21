@@ -116,8 +116,6 @@ public class Login extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 255, 204));
-
         jLabel4.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
         jLabel4.setText("USUARIO");
 
@@ -239,8 +237,9 @@ public class Login extends javax.swing.JFrame {
         intentos++;
 
         JOptionPane.showMessageDialog(this,
-                "Usuario o contraseña incorrectos\n"
-                + "Intento " + intentos + " de 3",
+                """
+                Usuario o contrase\u00f1a incorrectos
+                Intento """ + intentos + " de 3",
                 "ERROR",
                 JOptionPane.ERROR_MESSAGE);
 
@@ -258,22 +257,16 @@ public class Login extends javax.swing.JFrame {
                     "Sistema bloqueado por 30 segundos");
 
             // Temporizador de 30 segundos
-            javax.swing.Timer timer = new javax.swing.Timer(30000, new java.awt.event.ActionListener() {
-
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-
-                    btnEntrar.setEnabled(true);
-                    txtUsuario1.setEditable(true);
-                    txtPassword.setEditable(true);
-
-                    intentos = 0;
-                    bloqueado = false;
-
-                    JOptionPane.showMessageDialog(null,
-                            "El botón ha sido desbloqueado");
-
-                }
+            javax.swing.Timer timer = new javax.swing.Timer(30000, (java.awt.event.ActionEvent e) -> {
+                btnEntrar.setEnabled(true);
+                txtUsuario1.setEditable(true);
+                txtPassword.setEditable(true);
+                
+                intentos = 0;
+                bloqueado = false;
+                
+                JOptionPane.showMessageDialog(null,
+                        "El botón ha sido desbloqueado");
             });
 
             timer.setRepeats(false);
