@@ -8,9 +8,13 @@ package com.mycompany.condominio_vistaverde;
  *
  * @author wesle
  */
-public class Condominio_vistaverde {
+public class CondominioVistaVerde {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+     // Mostrar el formulario Login
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
+        });
+        
     }
 }

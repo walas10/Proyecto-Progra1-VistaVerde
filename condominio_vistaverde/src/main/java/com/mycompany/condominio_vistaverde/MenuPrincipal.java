@@ -170,7 +170,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        login lg = new login ();
+        Login lg = new Login ();
         lg.setVisible(true);
         dispose();
         
@@ -178,7 +178,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        REGISTRO_PROPIETARIO RP = new REGISTRO_PROPIETARIO();
+        RegistroPropietario RP = new RegistroPropietario();
         RP.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -192,14 +192,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        REPORTE_GENERAL RG = new REPORTE_GENERAL();
+        ReporteGeneral RG = new ReporteGeneral();
         RG.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        CASAS_MOROSAS CM = new CASAS_MOROSAS();
+        CasasMorosas CM = new CasasMorosas();
         CM.setVisible(true);
         dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
