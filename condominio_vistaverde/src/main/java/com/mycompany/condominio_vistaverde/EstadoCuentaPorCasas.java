@@ -17,6 +17,9 @@ public class EstadoCuentaPorCasas extends javax.swing.JFrame {
      */
     public EstadoCuentaPorCasas() {
         initComponents();
+                this.setSize(900, 681);
+    this.setLocationRelativeTo(null);
+    this.setResizable(false);
     }
 
     /**
