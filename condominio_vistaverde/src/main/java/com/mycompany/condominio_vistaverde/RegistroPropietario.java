@@ -50,6 +50,7 @@ public class RegistroPropietario extends javax.swing.JFrame {
         jButton2.setText("volvermenu");
         jButton2.addActionListener(this::jButton2ActionPerformed);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("REGISTRO DE PROPIETARIO");
 
         jLabel2.setText("Nombre Completo:");
