@@ -17,6 +17,9 @@ public class ReporteGeneral extends javax.swing.JFrame {
      */
     public ReporteGeneral() {
         initComponents();
+                this.setSize(900, 681);
+    this.setLocationRelativeTo(null);
+    this.setResizable(false);
     }
 
     /**
