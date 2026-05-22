@@ -27,6 +27,9 @@ public class ConfiguraciónCuota extends javax.swing.JFrame {
     txtCuotaActual1.setEditable(false);
 
     mostrarCuotaActual();
+            this.setSize(900, 681);
+    this.setLocationRelativeTo(null);
+    this.setResizable(false);
     }
     
 private void mostrarCuotaActual() {
