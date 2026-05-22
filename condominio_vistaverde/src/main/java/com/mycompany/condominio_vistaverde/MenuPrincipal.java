@@ -22,12 +22,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     public MenuPrincipal() {
         initComponents();
         this.setSize(900, 681);
-    this.setLocationRelativeTo(null);
-    this.setResizable(false);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
 
-    mostrarFecha();
-    mostrarHora();
-    
+        mostrarFecha();
+        mostrarHora();   
     }
     
     public void mostrarFecha(){
