@@ -18,10 +18,20 @@ public class RegistroPropietario extends javax.swing.JFrame {
      */
     public RegistroPropietario() {
         initComponents();
-                this.setSize(900, 681);
-    this.setLocationRelativeTo(null);
-    this.setResizable(false);
+        this.setSize(900, 681);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        cargarCasas();
     }
+    
+    private void cargarCasas() {
+    nocasas.removeAllItems();
+    nocasas.addItem("Seleccione una casa");
+
+    for (int i = 1; i <= 30; i++) {
+        nocasas.addItem(String.valueOf(i));
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,6 +72,7 @@ public class RegistroPropietario extends javax.swing.JFrame {
         jLabel5.setText("Correo Electronico:");
 
         nocasas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        nocasas.addActionListener(this::nocasasActionPerformed);
 
         correo.addActionListener(this::correoActionPerformed);
 
@@ -143,6 +154,10 @@ public class RegistroPropietario extends javax.swing.JFrame {
     private void correoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_correoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_correoActionPerformed
+
+    private void nocasasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nocasasActionPerformed
+        
+    }//GEN-LAST:event_nocasasActionPerformed
 
     /**
      * @param args the command line arguments
