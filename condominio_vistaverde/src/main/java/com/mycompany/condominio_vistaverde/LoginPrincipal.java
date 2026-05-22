@@ -112,71 +112,51 @@ public class LoginPrincipal extends javax.swing.JFrame {
 
     private void btnEntrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrar1ActionPerformed
         // Verificar si está bloqueado
-        if(bloqueado){
-            JOptionPane.showMessageDialog(this,
-                "El sistema está bloqueado.\nEspere 30 segundos.");
-            return;
-        }
+   if(bloqueado){
+    JOptionPane.showMessageDialog(this,
+        "El sistema está bloqueado.");
+    return;
+}
 
-        String usuario = txtUsuario1.getText();
-        String password = String.valueOf(txtPassword.getPassword());
+String usuario = txtUsuario1.getText();
+String password = String.valueOf(txtPassword.getPassword());
 
-        // Credenciales correctas
-        String usuarioCorrecto = "iusr_vistaverde";
-        String passwordCorrecta = "R3sidencial2026%";
+// Credenciales correctas
+String usuarioCorrecto = "iusr_vistaverde";
+String passwordCorrecta = "R3sidencial2026%";
 
-        if(usuario.equals(usuarioCorrecto) &&
-            password.equals(passwordCorrecta)) {
+if(usuario.equals(usuarioCorrecto) &&
+   password.equals(passwordCorrecta)) {
 
-            JOptionPane.showMessageDialog(this,
-                "Bienvenido Administrador");
-            MenuPrincipal mp = new MenuPrincipal ();
-            mp.setVisible(true);
-            dispose();
+    JOptionPane.showMessageDialog(this,
+        "Bienvenido Administrador");
 
-            dispose();
+    MenuPrincipal mp = new MenuPrincipal();
+    mp.setVisible(true);
 
-        } else {
+    dispose();
 
-            intentos++;
+} else {
 
-            JOptionPane.showMessageDialog(this,
-                """
-                Usuario o contrase\u00f1a incorrectos
-                Intento """ + intentos + " de 3",
-                "ERROR",
-                JOptionPane.ERROR_MESSAGE);
+    intentos++;
 
-            txtPassword.setText("");
+    JOptionPane.showMessageDialog(this,
+        "Usuario o contraseña incorrectos\nIntento "
+        + intentos + " de 3",
+        "ERROR",
+        JOptionPane.ERROR_MESSAGE);
 
-            // Bloquear por 30 segundos
-            if(intentos >= 3){
-                txtUsuario1.setEditable(false);
-                txtPassword.setEditable(false);
+    txtPassword.setText("");
 
-                btnEntrar1.setEnabled(false);
-                bloqueado = true;
+    // Cerrar programa después de 3 intentos
+    if(intentos >= 3){
 
-                JOptionPane.showMessageDialog(this,
-                    "Sistema bloqueado por 30 segundos");
+        JOptionPane.showMessageDialog(this,
+            "Has superado los 3 intentos.\nEl programa se cerrará.");
 
-                // Temporizador de 30 segundos
-                javax.swing.Timer timer = new javax.swing.Timer(30000, (java.awt.event.ActionEvent e) -> {
-                    btnEntrar1.setEnabled(true);
-                    txtUsuario1.setEditable(true);
-                    txtPassword.setEditable(true);
-
-                    intentos = 0;
-                    bloqueado = false;
-
-                    JOptionPane.showMessageDialog(null,
-                        "El botón ha sido desbloqueado");
-                });
-
-                timer.setRepeats(false);
-                timer.start();
-            }
-        }
+        System.exit(0);
+    }
+}
 
     }//GEN-LAST:event_btnEntrar1ActionPerformed
 
