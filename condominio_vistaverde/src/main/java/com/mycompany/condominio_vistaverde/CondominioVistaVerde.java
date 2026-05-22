@@ -41,7 +41,7 @@ public class CondominioVistaVerde {
 
         // 3. MOSTRAR FORMULARIO LOGIN
         java.awt.EventQueue.invokeLater(() -> {
-            new Login().setVisible(true);
+            new LoginPrincipal().setVisible(true);
         });
     }
 }

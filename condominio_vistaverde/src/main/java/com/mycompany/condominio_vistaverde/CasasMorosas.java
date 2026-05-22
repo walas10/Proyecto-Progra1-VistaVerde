@@ -17,6 +17,9 @@ public class CasasMorosas extends javax.swing.JFrame {
      */
     public CasasMorosas() {
         initComponents();
+                this.setSize(900, 681);
+    this.setLocationRelativeTo(null);
+    this.setResizable(false);
     }
 
     /**

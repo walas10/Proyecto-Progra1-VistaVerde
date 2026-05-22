@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <residencial>
-                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -58,7 +78,27 @@
     
     
     <casas/>
-                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -116,7 +156,7 @@
     
     
     <pagos>
-                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
         
         
         
@@ -306,6 +346,215 @@
         
         
         
+        
+        
+        
+                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                                                                            
+        
+        
+        
+        
+        
+        
+                                            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                                                                    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                                                                    
+    
+        
+        
+        
+        
+        
+        
+        
+        
+                                                            
+        
+        
+        
+        
+        
+        
+        
+        
+                                                            
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <pago>
+                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <casa>CASA 1</casa>
+                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <mes>Enero</mes>
+                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <año>2026</año>
+                                                                                                                                    
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <cuota>500.00</cuota>
+                                                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        </pago>
+                                                                                    
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        <pago>
+                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            <casa>CASA 1</casa>
+                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            <mes>Febrero</mes>
+                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            <año>2026</año>
+                                                                                                            
+            
+            
+            
+            
+            
+            
+            
+            <cuota>1500.00</cuota>
+                                                                                                        
+        
+        
+        
+        
+        
+        
+        
+        </pago>
+                                                                    
+        
+        
+        
+        
+        
+        
+        
         <pago>
                                                                                                 
             
@@ -322,7 +571,7 @@
             
             
             
-            <mes>Enero</mes>
+            <mes>Marzo</mes>
                                                                                                 
             
             
@@ -361,14 +610,14 @@
             
             
             
-            <casa>CASA 1</casa>
+            <casa>CASA 2</casa>
                                                                                     
             
             
             
             
             
-            <mes>Febrero</mes>
+            <mes>Enero</mes>
                                                                                     
             
             
@@ -402,13 +651,13 @@
             
             
             
-            <casa>CASA 1</casa>
+            <casa>CASA 2</casa>
                                                                         
             
             
             
             
-            <mes>Marzo</mes>
+            <mes>Febrero</mes>
                                                                         
             
             
@@ -437,7 +686,7 @@
             
             
             
-            <casa>CASA 2</casa>
+            <casa>CASA 7</casa>
                                                             
             
             
@@ -459,59 +708,23 @@
         
         </pago>
                                     
-        
-        
-        
-        <pago>
-                                                
-            
-            
-            <casa>CASA 2</casa>
-                                                
-            
-            
-            <mes>Febrero</mes>
-                                                
-            
-            
-            <año>2026</año>
-                                                
-            
-            
-            <cuota>1500.00</cuota>
-                                            
-        
-        
-        </pago>
-                            
-        
-        
-        <pago>
-                                    
-            
-            <casa>CASA 2</casa>
-                                    
-            
-            <mes>Marzo</mes>
-                                    
-            
-            <año>2026</año>
-                                    
-            
-            <cuota>1500.00</cuota>
-                                
-        
-        </pago>
-                    
     
+    
+        
         <pago>
-            <casa>CASA 2</casa>
-            <mes>Abril</mes>
+                        
+            <casa>CASA 6</casa>
+                        
+            <mes>Enero</mes>
+                        
             <año>2026</año>
-            <cuota>500.00</cuota>
+                        
+            <cuota>1500.00</cuota>
+                    
         </pago>
+            
     </pagos>
-                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                    
 
 
 
@@ -533,6 +746,26 @@
 
 
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -569,7 +802,27 @@
     
     
     <configuracion>
-                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
@@ -605,7 +858,27 @@
         
         
         <cuotaActual>500.00</cuotaActual>
-                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -641,7 +914,27 @@
     
     
     </configuracion>
-                                                                                                                                            
+                                                                                                                                                                                                                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
