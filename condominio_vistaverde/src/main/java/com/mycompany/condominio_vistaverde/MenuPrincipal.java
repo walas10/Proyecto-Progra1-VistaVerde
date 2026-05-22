@@ -176,7 +176,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
         lblFecha.setText("jLabel2");
 
         lblHora.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
-        lblHora.setText("jLabel3");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
