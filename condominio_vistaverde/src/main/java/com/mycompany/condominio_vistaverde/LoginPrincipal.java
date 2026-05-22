@@ -21,6 +21,8 @@ public class LoginPrincipal extends javax.swing.JFrame {
     boolean bloqueado=false;
     public LoginPrincipal() {
         initComponents();
+         this.setLocationRelativeTo(null);
+    this.setResizable(false);
         
     }
 
