@@ -4,10 +4,10 @@
  */
 package com.mycompany.condominio_vistaverde;
 
-/**
- *
- * @author LENOVO
- */
+
+import org.w3c.dom.*;
+import javax.swing.table.DefaultTableModel;
+
 public class EstadoCuentaPorCasas extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(EstadoCuentaPorCasas.class.getName());
@@ -20,7 +20,58 @@ public class EstadoCuentaPorCasas extends javax.swing.JFrame {
                 this.setSize(900, 681);
     this.setLocationRelativeTo(null);
     this.setResizable(false);
+    
+    cargarCasas();
+    configurarTablas();
+    
+    txtPropietario.setEditable(false);
+    txtTotal.setEditable(false);
+    
     }
+    
+    
+    private void cargarCasas(){
+
+    cmbCasa.removeAllItems();
+
+    for(int i = 1; i <= 30; i++){
+
+        cmbCasa.addItem(String.valueOf(i));
+    }
+}
+
+private void configurarTablas(){
+
+    DefaultTableModel modeloPagados =
+    new DefaultTableModel() {
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+
+            return false;
+        }
+    };
+
+    modeloPagados.addColumn("Mes");
+    modeloPagados.addColumn("Año");
+
+    tblPagados.setModel(modeloPagados);
+
+    DefaultTableModel modeloPendientes =
+    new DefaultTableModel() {
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+
+            return false;
+        }
+    };
+
+    modeloPendientes.addColumn("Mes");
+    modeloPendientes.addColumn("Año");
+
+    tblPendientes.setModel(modeloPendientes);
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,27 +83,166 @@ public class EstadoCuentaPorCasas extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton2 = new javax.swing.JButton();
+        lblTitulo = new javax.swing.JLabel();
+        lblCasa = new javax.swing.JLabel();
+        cmbCasa = new javax.swing.JComboBox<>();
+        btnBuscar = new javax.swing.JButton();
+        txtPropietario = new javax.swing.JTextField();
+        lblPropietario = new javax.swing.JLabel();
+        scrollPagados = new javax.swing.JScrollPane();
+        tblPagados = new javax.swing.JTable();
+        scrollPendientes = new javax.swing.JScrollPane();
+        tblPendientes = new javax.swing.JTable();
+        lblTotal = new javax.swing.JLabel();
+        txtTotal = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Estado de Cuenta por Casa");
+        setPreferredSize(new java.awt.Dimension(900, 961));
 
-        jButton2.setText("volvermenu");
+        jButton2.setText("Volver a Menú");
         jButton2.addActionListener(this::jButton2ActionPerformed);
+
+        lblTitulo.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 36)); // NOI18N
+        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitulo.setText("ESTADO DE CUENTA POR CASA");
+        lblTitulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        lblCasa.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblCasa.setText("Seleccione No. de Casa: ");
+
+        cmbCasa.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cmbCasa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnBuscar.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.setPreferredSize(new java.awt.Dimension(72, 23));
+        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
+
+        txtPropietario.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+
+        lblPropietario.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblPropietario.setText("Propietario:");
+
+        tblPagados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollPagados.setViewportView(tblPagados);
+
+        tblPendientes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollPendientes.setViewportView(tblPendientes);
+
+        lblTotal.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblTotal.setText("Total Pagado: ");
+
+        txtTotal.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel1.setText("MESES PENDIENTES DE PAGO");
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        jLabel2.setText("MESES PAGADOS");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(251, Short.MAX_VALUE))
+                .addGap(74, 74, 74)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(cmbCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(43, 43, 43)
+                                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scrollPagados, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(55, 55, 55)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                            .addComponent(scrollPendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(34, 34, 34))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(136, 136, 136)
+                .addComponent(lblTitulo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(163, 163, 163))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(175, 175, 175))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(210, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addGap(15, 15, 15)
+                .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblCasa)
+                        .addComponent(cmbCasa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(scrollPendientes, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(scrollPagados, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTotal)
+                    .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addComponent(jButton2)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -63,6 +253,129 @@ public class EstadoCuentaPorCasas extends javax.swing.JFrame {
         menu.setVisible(true);
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        String casaSeleccionada =
+        cmbCasa.getSelectedItem().toString();
+
+Document doc = BDXML.obtenerDocumento();
+
+// TABLAS
+DefaultTableModel modeloPagados =
+        (DefaultTableModel) tblPagados.getModel();
+
+DefaultTableModel modeloPendientes =
+        (DefaultTableModel) tblPendientes.getModel();
+
+modeloPagados.setRowCount(0);
+modeloPendientes.setRowCount(0);
+
+// LIMPIAR
+txtPropietario.setText("");
+txtTotal.setText("");
+
+// BUSCAR DUEÑO
+NodeList listaCasas =
+        doc.getElementsByTagName("casa");
+
+for (int i = 0; i < listaCasas.getLength(); i++) {
+
+    Element casa =
+            (Element) listaCasas.item(i);
+
+    NodeList numeros =
+            casa.getElementsByTagName("numero");
+
+    if (numeros.getLength() > 0) {
+
+        String numeroCasa =
+                numeros.item(0).getTextContent();
+
+        if (numeroCasa.equals(casaSeleccionada)) {
+
+            NodeList duenios =
+                    casa.getElementsByTagName("duenio");
+
+            if (duenios.getLength() > 0) {
+
+                txtPropietario.setText(
+                        duenios.item(0).getTextContent()
+                );
+            }
+        }
+    }
+}
+
+// MESES
+String[] meses = {
+    "Enero", "Febrero", "Marzo",
+    "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre",
+    "Octubre", "Noviembre", "Diciembre"
+};
+
+boolean[] pagados = new boolean[12];
+
+double total = 0;
+
+NodeList listaPagos =
+        doc.getElementsByTagName("pago");
+
+for (int i = 0; i < listaPagos.getLength(); i++) {
+
+    Element pago =
+            (Element) listaPagos.item(i);
+
+    String casaXML =
+    pago.getElementsByTagName("casa")
+        .item(0).getTextContent();
+
+System.out.println(casaXML);
+
+    if (casaXML.equals("CASA " + casaSeleccionada)) {
+
+        String mes =
+                pago.getElementsByTagName("mes")
+                        .item(0).getTextContent();
+
+        String año =
+                pago.getElementsByTagName("año")
+                        .item(0).getTextContent();
+
+        String cuota =
+                pago.getElementsByTagName("cuota")
+                        .item(0).getTextContent();
+
+        for (int j = 0; j < meses.length; j++) {
+
+            if (meses[j].equals(mes)) {
+
+                pagados[j] = true;
+            }
+        }
+
+        modeloPagados.addRow(
+                new Object[]{mes, año}
+        );
+
+        total += Double.parseDouble(cuota);
+    }
+}
+
+// PENDIENTES
+for (int i = 0; i < meses.length; i++) {
+
+    if (!pagados[i]) {
+
+        modeloPendientes.addRow(
+                new Object[]{meses[i], "2026"}
+        );
+    }
+}
+
+txtTotal.setText("Q" + total);
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -90,6 +403,20 @@ public class EstadoCuentaPorCasas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JComboBox<String> cmbCasa;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel lblCasa;
+    private javax.swing.JLabel lblPropietario;
+    private javax.swing.JLabel lblTitulo;
+    private javax.swing.JLabel lblTotal;
+    private javax.swing.JScrollPane scrollPagados;
+    private javax.swing.JScrollPane scrollPendientes;
+    private javax.swing.JTable tblPagados;
+    private javax.swing.JTable tblPendientes;
+    private javax.swing.JTextField txtPropietario;
+    private javax.swing.JTextField txtTotal;
     // End of variables declaration//GEN-END:variables
 }
