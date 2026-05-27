@@ -332,26 +332,31 @@ String casa = cmbCasas.getSelectedItem().toString();
             return;
         }
 
-        // CONFIRMACIÓN
-        int respuesta = JOptionPane.showConfirmDialog(
-                this,
-                "¿Está seguro de registrar el pago?\n\n"
-                + "Casa: " + casa
-                + "\nMes: " + mes
-                + "\nAño: " + año
-                + "\nCuota: Q." + cuota,
-                "Confirmar pago",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
+// 1. Definimos los textos que queremos en los botones
+Object[] opciones = {"Sí", "No"};
 
-        if (respuesta != JOptionPane.YES_OPTION) {
-            return;
-        }
+// 2. Usamos showOptionDialog en lugar de showConfirmDialog
+int respuesta = JOptionPane.showOptionDialog(
+        this,
+        "¿Está seguro de registrar el pago?\n\n"
+        + "Casa: " + casa
+        + "\nMes: " + mes
+        + "\nAño: " + año
+        + "\nCuota: Q." + cuota,
+        "Confirmar pago",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,        // No usamos un icono personalizado (usará el de QUESTION)
+        opciones,    // El arreglo con nuestros botones en español
+        opciones[0]  // El botón resaltado por defecto ("Sí")
+);
 
-        // GUARDAR PAGO
+// 3. La lógica de respuesta sigue siendo la misma
+if (respuesta != JOptionPane.YES_OPTION) {
+    return;
+}
         BDXML.registrarPago(casa, mes, año, cuota);
-
+enviarCorreoPago(casa, mes, año, cuota);
         JOptionPane.showMessageDialog(this, "Pago registrado correctamente.");
 
         // RESET
@@ -421,4 +426,49 @@ String casa = cmbCasas.getSelectedItem().toString();
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField txtCuota;
     // End of variables declaration//GEN-END:variables
+
+private void enviarCorreoPago(String casa, String mes, String año, String cuota) {
+    new Thread(() -> {
+        final String remitente = "2021-50077@liceocanadiense.edu.gt"; // El correo que generó el KEY
+        final String clave = "zofh xszd czvt ucrj";    // Tu App Password de Google
+
+        java.util.Properties props = new java.util.Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+        jakarta.mail.Session session = jakarta.mail.Session.getInstance(props, new jakarta.mail.Authenticator() {
+            protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new jakarta.mail.PasswordAuthentication(remitente, clave);
+            }
+        });
+
+        try {
+            jakarta.mail.Message message = new jakarta.mail.internet.MimeMessage(session);
+            message.setFrom(new jakarta.mail.internet.InternetAddress(remitente));
+            message.setRecipients(jakarta.mail.Message.RecipientType.TO, 
+                    jakarta.mail.internet.InternetAddress.parse("rdepazs1@miumg.edu.gt"));
+            
+            message.setSubject("Comprobante de Pago: " + casa + " - " + mes + "/" + año);
+            
+            String html = "<div style='font-family: sans-serif; border: 1px solid #000; padding: 20px; width: 300px;'>"
+                        + "<h2 style='color: #000033;'>VISTA VERDE</h2>"
+                        + "<hr>"
+                        + "<p><b>Casa:</b> " + casa + "</p>"
+                        + "<p><b>Periodo:</b> " + mes + " " + año + "</p>"
+                        + "<p style='font-size: 1.2em;'><b>Monto:</b> Q." + cuota + "</p>"
+                        + "<hr>"
+                        + "<p style='font-size: 0.8em;'>Pago registrado exitosamente.</p>"
+                        + "</div>";
+            
+            message.setContent(html, "text/html; charset=utf-8");
+
+            jakarta.mail.Transport.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }).start();
+}
 }
