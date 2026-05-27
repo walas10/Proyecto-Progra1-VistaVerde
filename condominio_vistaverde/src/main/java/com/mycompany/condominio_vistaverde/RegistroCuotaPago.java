@@ -332,24 +332,29 @@ String casa = cmbCasas.getSelectedItem().toString();
             return;
         }
 
-        // CONFIRMACIÓN
-        int respuesta = JOptionPane.showConfirmDialog(
-                this,
-                "¿Está seguro de registrar el pago?\n\n"
-                + "Casa: " + casa
-                + "\nMes: " + mes
-                + "\nAño: " + año
-                + "\nCuota: Q." + cuota,
-                "Confirmar pago",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
+// 1. Definimos los textos que queremos en los botones
+Object[] opciones = {"Sí", "No"};
 
-        if (respuesta != JOptionPane.YES_OPTION) {
-            return;
-        }
+// 2. Usamos showOptionDialog en lugar de showConfirmDialog
+int respuesta = JOptionPane.showOptionDialog(
+        this,
+        "¿Está seguro de registrar el pago?\n\n"
+        + "Casa: " + casa
+        + "\nMes: " + mes
+        + "\nAño: " + año
+        + "\nCuota: Q." + cuota,
+        "Confirmar pago",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,        // No usamos un icono personalizado (usará el de QUESTION)
+        opciones,    // El arreglo con nuestros botones en español
+        opciones[0]  // El botón resaltado por defecto ("Sí")
+);
 
-        // GUARDAR PAGO
+// 3. La lógica de respuesta sigue siendo la misma
+if (respuesta != JOptionPane.YES_OPTION) {
+    return;
+}
         BDXML.registrarPago(casa, mes, año, cuota);
 
         JOptionPane.showMessageDialog(this, "Pago registrado correctamente.");
