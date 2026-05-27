@@ -208,16 +208,11 @@ private void mostrarCuotaActual() {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 String nuevaCuotaTexto = txtCuotaNueva.getText().trim();
+String confirmarCuotaTexto = txtCuotaConfirmar.getText().trim();
 
-String confirmarCuotaTexto =
-        txtCuotaConfirmar.getText().trim();
-
-if (nuevaCuotaTexto.isEmpty()
-        || confirmarCuotaTexto.isEmpty()) {
-
-    JOptionPane.showMessageDialog(this,
-            "Debe completar todos los campos.");
-
+// 1. Validación de campos vacíos
+if (nuevaCuotaTexto.isEmpty() || confirmarCuotaTexto.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Debe completar todos los campos.");
     return;
 }
 
@@ -225,57 +220,52 @@ double nuevaCuota;
 double confirmarCuota;
 
 try {
-
-    nuevaCuota = Double.parseDouble(nuevaCuotaTexto);
-
-    confirmarCuota =
-            Double.parseDouble(confirmarCuotaTexto);
+    // Reemplazamos coma por punto por si el usuario usa el teclado numérico con configuración regional distinta
+    nuevaCuota = Double.parseDouble(nuevaCuotaTexto.replace(",", "."));
+    confirmarCuota = Double.parseDouble(confirmarCuotaTexto.replace(",", "."));
 
 } catch (NumberFormatException e) {
-
-    JOptionPane.showMessageDialog(this,
-            "Solo se permiten números y decimales.");
-
+    JOptionPane.showMessageDialog(this, "Solo se permiten números y decimales (use punto para decimal).");
     return;
 }
 
+// 2. Validación de valores lógicos
 if (nuevaCuota <= 0 || confirmarCuota <= 0) {
-
-    JOptionPane.showMessageDialog(this,
-            "La cuota debe ser mayor a 0.");
-
+    JOptionPane.showMessageDialog(this, "La cuota debe ser mayor a 0.");
     return;
 }
 
-if (nuevaCuota != confirmarCuota) {
-
-    JOptionPane.showMessageDialog(this,
-            "Las cuotas no coinciden.");
-
+// 3. Comparación exacta
+if (Double.compare(nuevaCuota, confirmarCuota) != 0) {
+    JOptionPane.showMessageDialog(this, "Las cuotas no coinciden.");
     return;
 }
 
-int respuesta = JOptionPane.showConfirmDialog(
+// 4. Diálogo con botones en español (Sí / No)
+Object[] opciones = {"Sí", "No"};
+int respuesta = JOptionPane.showOptionDialog(
         this,
-        "¿Está seguro de actualizar la cuota?",
+        "¿Está seguro de actualizar la cuota a: Q." + String.format("%.2f", nuevaCuota) + "?",
         "Confirmar actualización",
-        JOptionPane.YES_NO_OPTION
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        opciones,
+        opciones[0]
 );
 
 if (respuesta != JOptionPane.YES_OPTION) {
     return;
 }
 
-BDXML.actualizarCuota(
-        String.format("%.2f", nuevaCuota));
+// 5. Guardado (Usamos el punto decimal para la BD)
+BDXML.actualizarCuota(String.format(java.util.Locale.US, "%.2f", nuevaCuota));
 
 mostrarCuotaActual();
-
 txtCuotaNueva.setText("");
 txtCuotaConfirmar.setText("");
 
-JOptionPane.showMessageDialog(this,
-        "Cuota actualizada correctamente.");        // TODO add your handling code here:
+JOptionPane.showMessageDialog(this, "Cuota actualizada correctamente.");        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtCuotaNuevaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuotaNuevaKeyTyped
@@ -283,7 +273,7 @@ validarEntradaDecimal(evt, txtCuotaNueva);           // TODO add your handling c
     }//GEN-LAST:event_txtCuotaNuevaKeyTyped
 
     private void txtCuotaConfirmarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCuotaConfirmarKeyTyped
-validarEntradaDecimal(evt, txtCuotaNueva);           // TODO add your handling code here:
+validarEntradaDecimal(evt, txtCuotaConfirmar);           // TODO add your handling code here:
     }//GEN-LAST:event_txtCuotaConfirmarKeyTyped
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
