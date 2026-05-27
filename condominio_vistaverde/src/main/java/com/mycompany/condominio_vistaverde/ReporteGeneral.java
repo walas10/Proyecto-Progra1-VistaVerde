@@ -1,10 +1,12 @@
 package com.mycompany.condominio_vistaverde;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class ReporteGeneral extends javax.swing.JFrame {
     
@@ -16,11 +18,36 @@ public class ReporteGeneral extends javax.swing.JFrame {
     this.setLocationRelativeTo(null);
     this.setResizable(false);
     
+    
     cargarReporteGeneral();
     }
     
+    private double calcularTotalRecaudadoMes(Document doc, String mesActual, String anioActual) {
+    double total = 0;
+
+    NodeList listaPagos = doc.getElementsByTagName("pago");
+
+    for (int i = 0; i < listaPagos.getLength(); i++) {
+        Element pago = (Element) listaPagos.item(i);
+
+        String mes = obtenerTexto(pago, "mes");
+        String anio = obtenerTexto(pago, "año");
+        String cuotaTexto = obtenerTexto(pago, "cuota");
+
+        if (mes.equals(mesActual) && anio.equals(anioActual)) {
+            try {
+                total += Double.parseDouble(cuotaTexto);
+            } catch (NumberFormatException e) {
+                System.out.println("Error convirtiendo cuota: " + cuotaTexto);
+            }
+        }
+    }
+
+    return total;
+}
+   
     private void cargarReporteGeneral() {
-        Document doc = BDXML.obtenerDocumento();
+         Document doc = BDXML.obtenerDocumento();
 
     if (doc == null) {
         JOptionPane.showMessageDialog(this, "No se pudo cargar el archivo residencial.xml");
@@ -30,6 +57,10 @@ public class ReporteGeneral extends javax.swing.JFrame {
     LocalDate fechaActual = LocalDate.now();
     String mesActual = obtenerNombreMes(fechaActual.getMonthValue());
     String anioActual = String.valueOf(fechaActual.getYear());
+
+    double cuotaActual = Double.parseDouble(BDXML.obtenerCuotaActual());
+    double totalRecaudadoMes = calcularTotalRecaudadoMes(doc, mesActual, anioActual);
+    double totalEsperadoMes = cuotaActual * 30;
 
     lblMesActual.setText("Mes Actual: " + mesActual + " " + anioActual);
 
@@ -62,6 +93,11 @@ public class ReporteGeneral extends javax.swing.JFrame {
 
     tblReporteGeneral.setModel(modelo);
     tblReporteGeneral.setRowHeight(25);
+
+    lblResumenMes.setText(
+        "Recaudado este mes: Q. " + String.format("%.2f", totalRecaudadoMes)
+        + " / Esperado: Q. " + String.format("%.2f", totalEsperadoMes)
+    );
     }
     
     private String obtenerPropietario(Document doc, String casaBuscada) {
@@ -182,7 +218,7 @@ public class ReporteGeneral extends javax.swing.JFrame {
         lblTitulo = new javax.swing.JLabel();
         lblMesActual = new javax.swing.JLabel();
         btnVolvermenu = new javax.swing.JButton();
-        lblResumenes = new javax.swing.JLabel();
+        lblResumenMes = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -207,8 +243,8 @@ public class ReporteGeneral extends javax.swing.JFrame {
         btnVolvermenu.setText("MENU");
         btnVolvermenu.addActionListener(this::btnVolvermenuActionPerformed);
 
-        lblResumenes.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lblResumenes.setText("Recaudado este mes: Q15,000.00 / Esperado: Q45,000.00");
+        lblResumenMes.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblResumenMes.setText("Recaudado este mes: Q15,000.00 / Esperado: Q45,000.00");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -222,7 +258,7 @@ public class ReporteGeneral extends javax.swing.JFrame {
                 .addGap(52, 52, 52)
                 .addComponent(btnVolvermenu)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblResumenes)
+                .addComponent(lblResumenMes)
                 .addGap(115, 115, 115))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -246,7 +282,7 @@ public class ReporteGeneral extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolvermenu, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblResumenes))
+                    .addComponent(lblResumenMes))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -285,7 +321,7 @@ public class ReporteGeneral extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblMesActual;
-    private javax.swing.JLabel lblResumenes;
+    private javax.swing.JLabel lblResumenMes;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTable tblReporteGeneral;
     // End of variables declaration//GEN-END:variables
