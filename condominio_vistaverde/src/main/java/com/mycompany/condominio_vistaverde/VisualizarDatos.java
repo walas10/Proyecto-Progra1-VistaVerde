@@ -24,12 +24,8 @@ public class VisualizarDatos extends javax.swing.JFrame {
     }
 
     public void cargarTablaCompleta() {
-
     try {
-
-        DefaultTableModel modelo =
-                new DefaultTableModel();
-
+        DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("Casa");
         modelo.addColumn("Propietario");
         modelo.addColumn("Telefono");
@@ -39,72 +35,39 @@ public class VisualizarDatos extends javax.swing.JFrame {
         modelo.addColumn("Cuota");
 
         Document doc = BDXML.obtenerDocumento();
-
-        NodeList listaPagos =
-                doc.getElementsByTagName("pago");
+        // Obtenemos todos los pagos
+        NodeList listaPagos = doc.getElementsByTagName("pago");
 
         for (int i = 0; i < listaPagos.getLength(); i++) {
+            Element pago = (Element) listaPagos.item(i);
 
-            Element pago =
-                    (Element) listaPagos.item(i);
+            // Datos básicos del pago
+            String casa = pago.getElementsByTagName("casa").item(0).getTextContent();
+            String mes = pago.getElementsByTagName("mes").item(0).getTextContent();
+            String año = pago.getElementsByTagName("año").item(0).getTextContent();
+            String cuota = pago.getElementsByTagName("cuota").item(0).getTextContent();
 
-            String casa =
-                    pago.getElementsByTagName("casa")
-                            .item(0).getTextContent();
+            // Inicializamos datos del dueño como "No registrado" por si no existe
+            String nombre = "Sin dueño";
+            String telefono = "-";
+            String correo = "-";
 
-            String mes =
-                    pago.getElementsByTagName("mes")
-                            .item(0).getTextContent();
-
-            String año =
-                    pago.getElementsByTagName("año")
-                            .item(0).getTextContent();
-
-            String cuota =
-                    pago.getElementsByTagName("cuota")
-                            .item(0).getTextContent();
-
-            String numeroCasa =
-                    casa.replace("CASA ", "");
-
-            String nombre = "";
-            String telefono = "";
-            String correo = "";
-
-            NodeList listaCasas =
-                    doc.getElementsByTagName("casa");
-
+            // Buscamos al dueño en la sección de <casas>
+            NodeList listaCasas = doc.getElementsByTagName("casa");
             for (int j = 0; j < listaCasas.getLength(); j++) {
-
-                Element casaXML =
-                        (Element) listaCasas.item(j);
-
-                if (casaXML.hasAttribute("numero")) {
-
-                    if (casaXML.getAttribute("numero")
-                            .equals(numeroCasa)) {
-
-                        NodeList propietarios =
-                                casaXML.getElementsByTagName("propietario");
-
-                        if (propietarios.getLength() > 0) {
-
-                            Element prop =
-                                    (Element) propietarios.item(0);
-
-                            nombre =
-                                    prop.getElementsByTagName("nombre")
-                                            .item(0).getTextContent();
-
-                            telefono =
-                                    prop.getElementsByTagName("telefono")
-                                            .item(0).getTextContent();
-
-                            correo =
-                                    prop.getElementsByTagName("correo")
-                                            .item(0).getTextContent();
-                        }
+                Element casaXML = (Element) listaCasas.item(j);
+                
+                // IMPORTANTE: Comparamos el texto exacto (ej. "CASA 1" con "CASA 1")
+                if (casaXML.getAttribute("numero").equals(casa)) {
+                    NodeList propietarios = casaXML.getElementsByTagName("propietario");
+                    
+                    if (propietarios.getLength() > 0) {
+                        Element prop = (Element) propietarios.item(0);
+                        nombre = prop.getElementsByTagName("nombre").item(0).getTextContent();
+                        telefono = prop.getElementsByTagName("telefono").item(0).getTextContent();
+                        correo = prop.getElementsByTagName("correo").item(0).getTextContent();
                     }
+                    break; // Ya lo encontramos, salimos del ciclo interno
                 }
             }
 
@@ -121,15 +84,10 @@ public class VisualizarDatos extends javax.swing.JFrame {
 
         jTable1.setModel(modelo);
 
-    } catch (DOMException e) {
-
-        JOptionPane.showMessageDialog(null,
-                "Error cargando tabla: "
-                + e.getMessage());
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Error cargando tabla: " + e.getMessage());
     }
 }
-
-    
     
     
     
