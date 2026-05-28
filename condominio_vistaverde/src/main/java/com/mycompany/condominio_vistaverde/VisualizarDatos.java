@@ -1,15 +1,15 @@
 package com.mycompany.condominio_vistaverde;
+
 import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-
-
+/**
+ *
+ * @author LENOVO
+ */
 public class VisualizarDatos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VisualizarDatos.class.getName());
@@ -18,81 +18,56 @@ public class VisualizarDatos extends javax.swing.JFrame {
      * Creates new form VisualizarDatos
      */
     public VisualizarDatos() {
-       initComponents();
-
-    cargarTablaCompleta();
+        initComponents();
+        cargarTablaPropietarios();
     }
 
-    public void cargarTablaCompleta() {
-    try {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Casa");
-        modelo.addColumn("Propietario");
-        modelo.addColumn("Telefono");
-        modelo.addColumn("Correo");
-        modelo.addColumn("Mes");
-        modelo.addColumn("Año");
-        modelo.addColumn("Cuota");
+    
+    public void cargarTablaPropietarios() {
+        try {
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("Casa");
+            modelo.addColumn("Propietario");
+            modelo.addColumn("Teléfono");
+            modelo.addColumn("Correo");
 
-        Document doc = BDXML.obtenerDocumento();
-        // Obtenemos todos los pagos
-        NodeList listaPagos = doc.getElementsByTagName("pago");
+            Document doc = BDXML.obtenerDocumento();
+            if (doc == null) return;
 
-        for (int i = 0; i < listaPagos.getLength(); i++) {
-            Element pago = (Element) listaPagos.item(i);
-
-            // Datos básicos del pago
-            String casa = pago.getElementsByTagName("casa").item(0).getTextContent();
-            String mes = pago.getElementsByTagName("mes").item(0).getTextContent();
-            String año = pago.getElementsByTagName("año").item(0).getTextContent();
-            String cuota = pago.getElementsByTagName("cuota").item(0).getTextContent();
-
-            // Inicializamos datos del dueño como "No registrado" por si no existe
-            String nombre = "Sin dueño";
-            String telefono = "-";
-            String correo = "-";
-
-            // Buscamos al dueño en la sección de <casas>
             NodeList listaCasas = doc.getElementsByTagName("casa");
-            for (int j = 0; j < listaCasas.getLength(); j++) {
-                Element casaXML = (Element) listaCasas.item(j);
-                
-                // IMPORTANTE: Comparamos el texto exacto (ej. "CASA 1" con "CASA 1")
-                if (casaXML.getAttribute("numero").equals(casa)) {
-                    NodeList propietarios = casaXML.getElementsByTagName("propietario");
-                    
-                    if (propietarios.getLength() > 0) {
-                        Element prop = (Element) propietarios.item(0);
-                        nombre = prop.getElementsByTagName("nombre").item(0).getTextContent();
-                        telefono = prop.getElementsByTagName("telefono").item(0).getTextContent();
-                        correo = prop.getElementsByTagName("correo").item(0).getTextContent();
-                    }
-                    break; // Ya lo encontramos, salimos del ciclo interno
+
+            for (int i = 0; i < listaCasas.getLength(); i++) {
+                Element casaElem = (Element) listaCasas.item(i);
+                String numeroCasa = casaElem.getAttribute("numero");
+
+                NodeList propList = casaElem.getElementsByTagName("propietario");
+                if (propList.getLength() > 0) {
+                    Element prop = (Element) propList.item(0);
+
+                    String nombre = getTextContentSafe(prop, "nombre");
+                    String telefono = getTextContentSafe(prop, "telefono");
+                    String correo = getTextContentSafe(prop, "correo");
+
+                    modelo.addRow(new Object[]{numeroCasa, nombre, telefono, correo});
                 }
             }
 
-            modelo.addRow(new Object[]{
-                casa,
-                nombre,
-                telefono,
-                correo,
-                mes,
-                año,
-                cuota
-            });
+            jTable1.setModel(modelo);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar propietarios: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        jTable1.setModel(modelo);
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error cargando tabla: " + e.getMessage());
     }
-}
     
     
     
     
-    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -100,8 +75,9 @@ public class VisualizarDatos extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -118,42 +94,50 @@ public class VisualizarDatos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton2.setText("Borrar");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
-
-        jButton3.setBackground(new java.awt.Color(0, 0, 51));
-        jButton3.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
-        jButton3.setText("MENU");
-        jButton3.addActionListener(this::jButton3ActionPerformed);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jButton2))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addGap(23, 23, 23)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 681, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+
+        jButton2.setBackground(new java.awt.Color(0, 0, 51));
+        jButton2.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
+        jButton2.setText("MENU");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
                 .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(133, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -161,67 +145,103 @@ public class VisualizarDatos extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(14, 14, 14)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
- try {
-
-        int fila =
-                jTable1.getSelectedRow();
-
-        if (fila == -1) {
-
-            JOptionPane.showMessageDialog(null,
-                    "Seleccione una fila");
-
-            return;
-        }
-
-        Document doc =
-                BDXML.obtenerDocumento();
-
-        NodeList listaPagos =
-                doc.getElementsByTagName("pago");
-
-        Node nodo =
-                listaPagos.item(fila);
-
-        nodo.getParentNode()
-                .removeChild(nodo);
-
-        BDXML.guardarDocumento(doc);
-
-        JOptionPane.showMessageDialog(null,
-                "Pago eliminado");
-
-        cargarTablaCompleta();
-
-    } catch (HeadlessException | DOMException e) {
-
-        JOptionPane.showMessageDialog(null,
-                "Error: " + e.getMessage());
-    }        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         MenuPrincipal menu = new MenuPrincipal ();
         menu.setVisible(true);
         dispose();        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+try {
+            int fila = jTable1.getSelectedRow();
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "Seleccione un propietario para eliminar");
+                return;
+            }
+
+            String casa = jTable1.getValueAt(fila, 0).toString();
+            String nombre = jTable1.getValueAt(fila, 1).toString();
+
+            int confirm = JOptionPane.showConfirmDialog(this,
+                    "¿Está seguro de eliminar al propietario de la " + casa + "?\n"
+                    + "Nombre: " + nombre + "\n\n"
+                    + "Esta acción no se puede deshacer.",
+                    "Confirmar Eliminación",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            if (confirm != JOptionPane.YES_OPTION) return;
+
+            boolean eliminado = eliminarPropietario(casa);
+
+            if (eliminado) {
+                JOptionPane.showMessageDialog(this, "Propietario eliminado correctamente");
+                cargarTablaPropietarios(); // Recargar tabla
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo eliminar el propietario");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage());
+            e.printStackTrace();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private boolean eliminarPropietario(String casa) {
+        try {
+            Document doc = BDXML.obtenerDocumento();
+            NodeList listaCasas = doc.getElementsByTagName("casa");
+
+            for (int i = 0; i < listaCasas.getLength(); i++) {
+                Element casaElem = (Element) listaCasas.item(i);
+                String numero = casaElem.getAttribute("numero").trim();
+
+                // Normalizar comparación
+                String casaBuscada = casa.startsWith("CASA") ? casa : "CASA " + casa;
+
+                if (numero.equals(casaBuscada)) {
+                    // Eliminar todo el nodo <casa>
+                    casaElem.getParentNode().removeChild(casaElem);
+                    BDXML.guardarDocumento(doc);
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    private String getTextContentSafe(Element parent, String tagName) {
+        try {
+            NodeList nodes = parent.getElementsByTagName(tagName);
+            if (nodes.getLength() > 0 && nodes.item(0) != null) {
+                return nodes.item(0).getTextContent().trim();
+            }
+        } catch (Exception e) {}
+        return "-";
+    }
     /**
      * @param args the command line arguments
      */
@@ -248,9 +268,10 @@ public class VisualizarDatos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
