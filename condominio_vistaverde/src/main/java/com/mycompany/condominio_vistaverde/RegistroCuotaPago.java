@@ -299,72 +299,80 @@ cmbAño.addItem("Seleccionar");
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
+// --- COMIENZO DEL CÓDIGO DEL BOTÓN ---
 String casa = cmbCasas.getSelectedItem().toString();
-        String mes = cmbMes.getSelectedItem().toString();
-        String año = cmbAño.getSelectedItem().toString();
+String mes = cmbMes.getSelectedItem().toString();
+String año = cmbAño.getSelectedItem().toString();
 
-        // OBTENER CUOTA ACTUAL DEL XML
-        String cuota = BDXML.obtenerCuotaActual();
+// 1. NUEVA VALIDACIÓN: BUSCAR DUEÑO EN EL XML
+String[] datosDueño = BDXML.obtenerDatosPropietario(casa);
 
-        // --------------------------------------------------------
-        // NUEVA VALIDACIÓN: ORDEN CRONOLÓGICO DE PAGOS
-        // --------------------------------------------------------
-        String mesFaltante = obtenerMesAnteriorNoPagado(casa, mes, año);
-        
-        if (mesFaltante != null) {
-            JOptionPane.showMessageDialog(this,
-                    "No se permite registrar el mes de " + mes + ".\n"
-                    + "Falta registrar el pago del mes de: " + mesFaltante + " del año " + año,
-                    "Pago correlativo requerido",
-                    JOptionPane.WARNING_MESSAGE);
-            return; // Detenemos la ejecución para que no proceda al pago
-        }
-        // --------------------------------------------------------
+if (datosDueño == null) {
+    JOptionPane.showMessageDialog(this, 
+        "ERROR: No hay ningún dueño registrado para la " + casa + ".\n" +
+        "Debe registrar al propietario antes de recibir pagos.", 
+        "Sin Propietario", JOptionPane.ERROR_MESSAGE);
+    return;
+}
 
-        // VALIDAR DUPLICADOS
-        if (BDXML.existePago(casa, mes, año)) {
-            JOptionPane.showMessageDialog(this,
-                    "Ya existe un pago registrado para "
-                    + casa + " en "
-                    + mes + " del año "
-                    + año
-                    + ".\nNo se puede duplicar el pago.");
-            return;
-        }
+String nombrePropietario = datosDueño[0];
+String correoDestino = datosDueño[1];
 
-// 1. Definimos los textos que queremos en los botones
+// OBTENER CUOTA ACTUAL DEL XML
+String cuota = BDXML.obtenerCuotaActual();
+
+// --- VALIDACIÓN CRONOLÓGICA (Tu código actual) ---
+String mesFaltante = obtenerMesAnteriorNoPagado(casa, mes, año);
+if (mesFaltante != null) {
+    JOptionPane.showMessageDialog(this,
+            "No se permite registrar el mes de " + mes + ".\n"
+            + "Falta registrar el pago del mes de: " + mesFaltante + " del año " + año,
+            "Pago correlativo requerido",
+            JOptionPane.WARNING_MESSAGE);
+    return; 
+}
+
+// --- VALIDAR DUPLICADOS (Tu código actual) ---
+if (BDXML.existePago(casa, mes, año)) {
+    JOptionPane.showMessageDialog(this,
+            "Ya existe un pago registrado para " + casa + " en " + mes + " del año " + año);
+    return;
+}
+
+// CONFIRMACIÓN CON NOMBRE DEL DUEÑO
 Object[] opciones = {"Sí", "No"};
-
-// 2. Usamos showOptionDialog en lugar de showConfirmDialog
 int respuesta = JOptionPane.showOptionDialog(
         this,
         "¿Está seguro de registrar el pago?\n\n"
-        + "Casa: " + casa
-        + "\nMes: " + mes
-        + "\nAño: " + año
-        + "\nCuota: Q." + cuota,
+        + "Propietario: " + nombrePropietario + "\n" // Ahora muestra el nombre
+        + "Casa: " + casa + "\n"
+        + "Mes: " + mes + "\n"
+        + "Año: " + año + "\n"
+        + "Cuota: Q." + cuota,
         "Confirmar pago",
         JOptionPane.YES_NO_OPTION,
         JOptionPane.QUESTION_MESSAGE,
-        null,        // No usamos un icono personalizado (usará el de QUESTION)
-        opciones,    // El arreglo con nuestros botones en español
-        opciones[0]  // El botón resaltado por defecto ("Sí")
+        null, opciones, opciones[0]
 );
 
-// 3. La lógica de respuesta sigue siendo la misma
 if (respuesta != JOptionPane.YES_OPTION) {
     return;
 }
-        BDXML.registrarPago(casa, mes, año, cuota);
-enviarCorreoPago(casa, mes, año, cuota);
-        JOptionPane.showMessageDialog(this, "Pago registrado correctamente.");
 
-        // RESET
-        cmbCasas.setSelectedIndex(0);
-        cmbMes.setSelectedIndex(0);
-        cmbAño.setSelectedIndex(0);
-        txtCuota.setText("Q. " + cuota);
-        btnPago.setEnabled(false);
+// REGISTRO Y ENVÍO
+BDXML.registrarPago(casa, mes, año, cuota);
+
+// Modificamos la llamada para pasarle el correo y el nombre extraídos
+enviarCorreoPago(casa, mes, año, cuota, correoDestino, nombrePropietario);
+
+JOptionPane.showMessageDialog(this, "Pago registrado correctamente y recibo enviado a: " + correoDestino);
+
+// RESET (Tu código actual)
+cmbCasas.setSelectedIndex(0);
+cmbMes.setSelectedIndex(0);
+cmbAño.setSelectedIndex(0);
+txtCuota.setText("Q. " + cuota);
+btnPago.setEnabled(false);
     }//GEN-LAST:event_btnPagoActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -427,9 +435,9 @@ enviarCorreoPago(casa, mes, año, cuota);
     private javax.swing.JTextField txtCuota;
     // End of variables declaration//GEN-END:variables
 
-private void enviarCorreoPago(String casa, String mes, String año, String cuota) {
+private void enviarCorreoPago(String casa, String mes, String año, String cuota, String destino, String nombreDuenio) {
     new Thread(() -> {
-        final String remitente = "2021-50077@liceocanadiense.edu.gt"; // El correo que generó el KEY
+        final String remitente = "2021-50077@liceocanadiense.edu.gt"; // Tu correo de remitente
         final String clave = "zofh xszd czvt ucrj";    // Tu App Password de Google
 
         java.util.Properties props = new java.util.Properties();
@@ -440,6 +448,7 @@ private void enviarCorreoPago(String casa, String mes, String año, String cuota
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
         jakarta.mail.Session session = jakarta.mail.Session.getInstance(props, new jakarta.mail.Authenticator() {
+            @Override
             protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
                 return new jakarta.mail.PasswordAuthentication(remitente, clave);
             }
@@ -448,27 +457,36 @@ private void enviarCorreoPago(String casa, String mes, String año, String cuota
         try {
             jakarta.mail.Message message = new jakarta.mail.internet.MimeMessage(session);
             message.setFrom(new jakarta.mail.internet.InternetAddress(remitente));
+            
+            // Ahora usamos la variable 'destino' que viene del XML
             message.setRecipients(jakarta.mail.Message.RecipientType.TO, 
-                    jakarta.mail.internet.InternetAddress.parse("rdepazs1@miumg.edu.gt"));
+                    jakarta.mail.internet.InternetAddress.parse(destino));
             
-            message.setSubject("Comprobante de Pago: " + casa + " - " + mes + "/" + año);
+            message.setSubject("RECIBO DE PAGO: " + mes + " " + año + " - Casa " + casa);
             
-            String html = "<div style='font-family: sans-serif; border: 1px solid #000; padding: 20px; width: 300px;'>"
-                        + "<h2 style='color: #000033;'>VISTA VERDE</h2>"
-                        + "<hr>"
-                        + "<p><b>Casa:</b> " + casa + "</p>"
-                        + "<p><b>Periodo:</b> " + mes + " " + año + "</p>"
-                        + "<p style='font-size: 1.2em;'><b>Monto:</b> Q." + cuota + "</p>"
-                        + "<hr>"
-                        + "<p style='font-size: 0.8em;'>Pago registrado exitosamente.</p>"
+            // Diseño HTML mejorado con el nombre del propietario
+            String html = "<div style='font-family: Arial, sans-serif; border: 2px solid #000033; padding: 25px; width: 350px; border-radius: 10px;'>"
+                        + "<h2 style='color: #000033; text-align: center; margin-top: 0;'>VISTA VERDE</h2>"
+                        + "<div style='background-color: #f0f0f0; padding: 10px; border-radius: 5px;'>"
+                        + "<p style='margin: 5px 0;'><b>Propietario:</b> " + nombreDuenio + "</p>"
+                        + "<p style='margin: 5px 0;'><b>Casa No.:</b> " + casa + "</p>"
+                        + "</div>"
+                        + "<hr style='border: 1px dashed #ccc; margin: 15px 0;'>"
+                        + "<p style='margin: 5px 0;'><b>Concepto:</b> Mantenimiento Mensual</p>"
+                        + "<p style='margin: 5px 0;'><b>Periodo:</b> " + mes + " " + año + "</p>"
+                        + "<h3 style='color: #28a745; margin: 15px 0;'>Monto Pagado: Q." + cuota + "</h3>"
+                        + "<hr style='border: 1px solid #000033;'>"
+                        + "<p style='font-size: 0.85em; color: #555; text-align: center;'>Este es un comprobante oficial de pago generado automáticamente.</p>"
                         + "</div>";
             
             message.setContent(html, "text/html; charset=utf-8");
 
             jakarta.mail.Transport.send(message);
+            System.out.println("Correo enviado exitosamente a: " + destino);
+            
         } catch (Exception e) {
+            System.err.println("Error al enviar el correo: " + e.getMessage());
             e.printStackTrace();
         }
     }).start();
-}
-}
+}}
