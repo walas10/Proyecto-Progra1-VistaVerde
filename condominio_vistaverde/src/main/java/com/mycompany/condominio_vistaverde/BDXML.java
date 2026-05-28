@@ -208,50 +208,60 @@ public static void actualizarCuota(String nuevaCuota) {
 }
 
 
-public static void registrarPropietario(String casa, String nombre, String telefono, String correo) {
+public static void registrarPropietario(String casa, String nombre, String telefono, String correo) throws Exception {
     Document doc = obtenerDocumento();
-    Element casas = (Element) doc.getElementsByTagName("casas").item(0);
+    
+    // 1. Buscar el nodo principal <casas>
+    NodeList listaNodosCasas = doc.getElementsByTagName("casas");
+    Element casasRaiz;
+    
+    if (listaNodosCasas.getLength() > 0) {
+        casasRaiz = (Element) listaNodosCasas.item(0);
+    } else {
+        // Por seguridad, si no existe <casas>, lo creamos
+        casasRaiz = doc.createElement("casas");
+        doc.getDocumentElement().appendChild(casasRaiz);
+    }
+
     NodeList listaCasas = doc.getElementsByTagName("casa");
-
-    Element casaElemento = null;
-
-    // Buscar si la casa ya existe
+    
+    // 2. Lógica: Solo un propietario por casa
     for (int i = 0; i < listaCasas.getLength(); i++) {
-        Element temp = (Element) listaCasas.item(i);
-        if (temp.getAttribute("numero").equals(casa)) {
-            casaElemento = temp;
+        Element c = (Element) listaCasas.item(i);
+        if (c.getAttribute("numero").equals(casa)) {
+            // Si ya tiene un hijo <propietario>, lanzamos una excepción para detener el proceso
+            if (c.getElementsByTagName("propietario").getLength() > 0) {
+                throw new Exception("La casa " + casa + " ya tiene un propietario asignado.");
+            }
+            // Si la casa existe pero está vacía, la usaremos
+            casasRaiz.removeChild(c); 
             break;
         }
     }
 
-    // Si no existe, crear el nodo de la casa
-    if (casaElemento == null) {
-        casaElemento = doc.createElement("casa");
-        casaElemento.setAttribute("numero", casa);
-        casas.appendChild(casaElemento);
-    } else {
-        // Si existe, limpiamos los datos viejos para poner los nuevos
-        while (casaElemento.hasChildNodes()) {
-            casaElemento.removeChild(casaElemento.getFirstChild());
-        }
-    }
+    // 3. Crear la estructura nueva
+    Element nuevaCasa = doc.createElement("casa");
+    nuevaCasa.setAttribute("numero", casa);
 
-    // Agregar/Actualizar datos del propietario
     Element prop = doc.createElement("propietario");
     
     Element elNombre = doc.createElement("nombre");
     elNombre.setTextContent(nombre);
-    prop.appendChild(elNombre);
-
+    
     Element elTel = doc.createElement("telefono");
     elTel.setTextContent(telefono);
-    prop.appendChild(elTel);
-
+    
     Element elCorreo = doc.createElement("correo");
     elCorreo.setTextContent(correo);
-    prop.appendChild(elCorreo);
 
-    casaElemento.appendChild(prop);
+    prop.appendChild(elNombre);
+    prop.appendChild(elTel);
+    prop.appendChild(elCorreo);
+    
+    nuevaCasa.appendChild(prop);
+    casasRaiz.appendChild(nuevaCasa);
+
+    // 4. GUARDAR CAMBIOS FÍSICAMENTE
     guardarDocumento(doc);
 }
 
