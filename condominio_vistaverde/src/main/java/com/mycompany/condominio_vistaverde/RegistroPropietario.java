@@ -294,8 +294,9 @@ public boolean validarCorreo(String correo){
     return correo.matches(regex);
 }
 
-private void enviarCorreoVerificacion(String destino, String nombre) throws Exception {
-    final String remitente = "2021-50077@liceocanadiense.edu.gt"; 
+private void enviarCorreoVerificacion(String destino, String nombre) {
+    
+    final String remitente = "2021-50077@liceocanadiense.edu.gt";
     final String clave = "zofh xszd czvt ucrj";
 
     java.util.Properties props = new java.util.Properties();
@@ -303,21 +304,96 @@ private void enviarCorreoVerificacion(String destino, String nombre) throws Exce
     props.put("mail.smtp.starttls.enable", "true");
     props.put("mail.smtp.host", "smtp.gmail.com");
     props.put("mail.smtp.port", "587");
+    props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
-    jakarta.mail.Session session = jakarta.mail.Session.getInstance(props, new jakarta.mail.Authenticator() {
-        protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
-            return new jakarta.mail.PasswordAuthentication(remitente, clave);
-        }
-    });
+    jakarta.mail.Session session = jakarta.mail.Session.getInstance(props,
+        new jakarta.mail.Authenticator() {
+            @Override
+            protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new jakarta.mail.PasswordAuthentication(remitente, clave);
+            }
+        });
 
-    jakarta.mail.Message message = new jakarta.mail.internet.MimeMessage(session);
-    message.setFrom(new jakarta.mail.internet.InternetAddress(remitente));
-    message.setRecipients(jakarta.mail.Message.RecipientType.TO, jakarta.mail.internet.InternetAddress.parse(destino));
-    message.setSubject("Verificación de Registro - Condominio Vista Verde");
-    message.setText("Hola " + nombre + ",\n\nEste es un correo automático para verificar tu cuenta en el sistema de Vista Verde.");
+    try {
 
-    jakarta.mail.Transport.send(message);
+        jakarta.mail.Message message = new jakarta.mail.internet.MimeMessage(session);
+
+        message.setFrom(new jakarta.mail.internet.InternetAddress(remitente));
+
+        message.setRecipients(
+                jakarta.mail.Message.RecipientType.TO,
+                jakarta.mail.internet.InternetAddress.parse(destino)
+        );
+
+        message.setSubject("VERIFICACIÓN DE CUENTA - VISTA VERDE");
+
+        // Diseño HTML bonito
+        String html =
+                "<div style='font-family: Arial, sans-serif; "
+                + "max-width: 500px; "
+                + "margin: auto; "
+                + "border: 2px solid #000033; "
+                + "border-radius: 12px; "
+                + "overflow: hidden;'>"
+
+                // Encabezado
+                + "<div style='background-color: #000033; "
+                + "color: white; "
+                + "padding: 20px; "
+                + "text-align: center;'>"
+
+                + "<h1 style='margin:0;'>VISTA VERDE</h1>"
+                + "<p style='margin:5px 0;'>Sistema de Gestión Residencial</p>"
+                + "</div>"
+
+                // Contenido
+                + "<div style='padding: 25px;'>"
+
+                + "<h2 style='color:#000033;'>¡Bienvenido/a!</h2>"
+
+                + "<p>Hola <b>" + nombre + "</b>,</p>"
+
+                + "<p>Tu cuenta ha sido registrada exitosamente en el sistema "
+                + "del Condominio Vista Verde.</p>"
+
+                + "<div style='background:#f4f4f4; "
+                + "padding:15px; "
+                + "border-radius:8px; "
+                + "margin:20px 0;'>"
+
+                + "<p style='margin:5px 0;'><b>Correo registrado:</b> "
+                + destino + "</p>"
+
+                + "<p style='margin:5px 0;'><b>Estado:</b> Cuenta verificada correctamente</p>"
+
+                + "</div>"
+
+                + "<p>Ahora podrás recibir notificaciones importantes sobre:</p>"
+
+                + "<ul>"
+                + "<li>Pagos realizados</li>"
+                + "<li>Avisos administrativos</li>"
+                + "<li>Información del condominio</li>"
+                + "</ul>"
+
+                + "<hr>"
+
+                + "<p style='font-size: 12px; color: gray; text-align:center;'>"
+                + "Este es un correo automático generado por el sistema Vista Verde."
+                + "</p>"
+
+                + "</div>"
+                + "</div>";
+
+        message.setContent(html, "text/html; charset=utf-8");
+
+        jakarta.mail.Transport.send(message);
+
+        System.out.println("Correo de verificación enviado.");
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw new RuntimeException("Error al enviar correo: " + e.getMessage());
+    }
 }
-
-
 }
