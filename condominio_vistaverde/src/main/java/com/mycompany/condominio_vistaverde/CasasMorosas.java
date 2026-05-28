@@ -39,6 +39,7 @@ public class CasasMorosas extends javax.swing.JFrame {
         lblMesActual = new javax.swing.JLabel();
         lblMes = new javax.swing.JLabel();
         btnActualizar = new javax.swing.JButton();
+        lblTotalMorosos = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Casas Morosas");
@@ -61,9 +62,17 @@ public class CasasMorosas extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "No. de Casa", "Propietario", "Teléfono", "Mes Pendiente"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         scrollMorosos.setViewportView(tblMorosos);
 
         lblMesActual.setText("Mes actual:");
@@ -72,21 +81,12 @@ public class CasasMorosas extends javax.swing.JFrame {
 
         btnActualizar.setText("Actualizar");
 
+        lblTotalMorosos.setText("Total casas morosas: 0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(76, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(scrollMorosos, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(171, 171, 171))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -99,6 +99,19 @@ public class CasasMorosas extends javax.swing.JFrame {
                         .addGap(6, 6, 6)
                         .addComponent(lblMes, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(79, 79, 79))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(76, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTotalMorosos, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(scrollMorosos, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(64, 64, 64))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(171, 171, 171)))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,9 +125,11 @@ public class CasasMorosas extends javax.swing.JFrame {
                     .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDescripcion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addGap(31, 31, 31)
                 .addComponent(scrollMorosos, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addGap(18, 18, 18)
+                .addComponent(lblTotalMorosos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnActualizar))
@@ -162,6 +177,7 @@ public class CasasMorosas extends javax.swing.JFrame {
     private javax.swing.JLabel lblMes;
     private javax.swing.JLabel lblMesActual;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JLabel lblTotalMorosos;
     private javax.swing.JScrollPane scrollMorosos;
     private javax.swing.JTable tblMorosos;
     // End of variables declaration//GEN-END:variables
