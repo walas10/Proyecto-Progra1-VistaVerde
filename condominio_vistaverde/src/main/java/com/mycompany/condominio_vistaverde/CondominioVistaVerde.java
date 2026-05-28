@@ -1,4 +1,4 @@
-package com.mycompany.condominio_vistaverde;
+    package com.mycompany.condominio_vistaverde;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import javax.swing.UIManager;
