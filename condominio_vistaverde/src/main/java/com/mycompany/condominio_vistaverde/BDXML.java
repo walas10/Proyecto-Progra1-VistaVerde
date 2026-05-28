@@ -265,24 +265,35 @@ public static void registrarPropietario(String casa, String nombre, String telef
     guardarDocumento(doc);
 }
 
-public static String[] obtenerDatosPropietario(String numeroCasa) {
-    Document doc = obtenerDocumento();
-    NodeList listaCasas = doc.getElementsByTagName("casa");
+public static String[] obtenerDatosPropietario(String casaBuscada) {
+    try {
+        Document doc = obtenerDocumento();
+        // Buscamos todas las etiquetas <casa>
+        NodeList listaCasas = doc.getElementsByTagName("casa");
 
-    for (int i = 0; i < listaCasas.getLength(); i++) {
-        Element casa = (Element) listaCasas.item(i);
-        if (casa.getAttribute("numero").equals(numeroCasa)) {
-            NodeList propList = casa.getElementsByTagName("propietario");
-            if (propList.getLength() > 0) {
-                Element prop = (Element) propList.item(0);
-                String nombre = prop.getElementsByTagName("nombre").item(0).getTextContent();
-                String correo = prop.getElementsByTagName("correo").item(0).getTextContent();
-                return new String[]{nombre, correo}; // Retorna ambos datos
+        for (int i = 0; i < listaCasas.getLength(); i++) {
+            Element casaElem = (Element) listaCasas.item(i);
+            
+            // IMPORTANTE: Buscamos el número en el atributo "numero" 
+            // que es como lo guarda el método registrarPropietario
+            String numero = casaElem.getAttribute("numero");
+
+            if (numero.equals(casaBuscada)) {
+                NodeList listaProp = casaElem.getElementsByTagName("propietario");
+                
+                if (listaProp.getLength() > 0) {
+                    Element prop = (Element) listaProp.item(0);
+                    
+                    String nombre = prop.getElementsByTagName("nombre").item(0).getTextContent();
+                    String correo = prop.getElementsByTagName("correo").item(0).getTextContent();
+                    
+                    return new String[]{nombre, correo};
+                }
             }
         }
+    } catch (Exception e) {
+        System.out.println("Error al obtener datos del propietario: " + e.getMessage());
     }
-    return null; // Si no encuentra dueño
+    return null; // Si llega aquí, es porque no encontró la casa o no tiene dueño
 }
-
-
 }
