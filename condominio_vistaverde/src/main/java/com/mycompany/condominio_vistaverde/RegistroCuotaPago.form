@@ -82,24 +82,18 @@
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
-                                  <Component id="btnPago" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
-                                  <Component id="txtCuota" min="-2" pref="140" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <EmptySpace pref="60" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
+                          <Component id="btnPago" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jLabel4" min="-2" pref="77" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel4" min="-2" pref="77" max="-2" attributes="0"/>
+                              <Component id="txtCuota" min="-2" pref="140" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
+                  <EmptySpace pref="60" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
