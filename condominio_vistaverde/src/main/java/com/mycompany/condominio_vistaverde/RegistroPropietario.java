@@ -197,24 +197,23 @@ public class RegistroPropietario extends javax.swing.JFrame {
         return;
     }
 
-    // Intentar enviar correo de verificación
     new Thread(() -> {
         try {
-            // Usamos la misma lógica de envío que configuramos antes
-            enviarCorreoVerificacion(mail, nombre);
-            
-            // Si el envío no dio error, guardamos en XML
+            // 1. Primero intentamos registrar en XML (Esto valida si la casa está libre)
             BDXML.registrarPropietario(casa, nombre, tel, mail);
             
+            // 2. Si el registro XML fue exitoso, enviamos el correo
+            enviarCorreoVerificacion(mail, nombre);
+            
             javax.swing.SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(this, "Propietario registrado y correo de verificación enviado.");
+                JOptionPane.showMessageDialog(this, "Registro exitoso. Se ha enviado un correo a " + mail);
                 limpiarCampos();
             });
             
         } catch (Exception e) {
+            // Aquí atrapamos tanto el error de "Casa ocupada" como el de "Correo inválido"
             javax.swing.SwingUtilities.invokeLater(() -> {
-                JOptionPane.showMessageDialog(this, "Error: El correo electrónico parece ser inválido o inexistente.", 
-                        "Correo no encontrado", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error de Registro", JOptionPane.ERROR_MESSAGE);
             });
         }
     }).start();
