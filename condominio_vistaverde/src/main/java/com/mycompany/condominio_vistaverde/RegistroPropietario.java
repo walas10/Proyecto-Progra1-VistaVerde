@@ -1,5 +1,7 @@
 package com.mycompany.condominio_vistaverde;
 
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -74,14 +76,28 @@ public class RegistroPropietario extends javax.swing.JFrame {
 
         jLabel5.setText("Correo Electronico:");
 
+        nombrecom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nombrecomKeyTyped(evt);
+            }
+        });
+
         nocasas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         nocasas.addActionListener(this::nocasasActionPerformed);
+
+        cellphone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                cellphoneKeyTyped(evt);
+            }
+        });
 
         correo.addActionListener(this::correoActionPerformed);
 
         jButton1.setText("Guardar Propietario");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jButton3.setText("Limpiar");
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -166,6 +182,72 @@ public class RegistroPropietario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_nocasasActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    String nombre = nombrecom.getText().trim();
+    String casa = nocasas.getSelectedItem().toString();
+    String tel = cellphone.getText().trim();
+    String mail = correo.getText().trim();
+
+    if (nombre.isEmpty() || tel.isEmpty() || mail.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.");
+        return;
+    }
+
+    // Intentar enviar correo de verificación
+    new Thread(() -> {
+        try {
+            // Usamos la misma lógica de envío que configuramos antes
+            enviarCorreoVerificacion(mail, nombre);
+            
+            // Si el envío no dio error, guardamos en XML
+            BDXML.registrarPropietario(casa, nombre, tel, mail);
+            
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(this, "Propietario registrado y correo de verificación enviado.");
+                limpiarCampos();
+            });
+            
+        } catch (Exception e) {
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                JOptionPane.showMessageDialog(this, "Error: El correo electrónico parece ser inválido o inexistente.", 
+                        "Correo no encontrado", JOptionPane.ERROR_MESSAGE);
+            });
+        }
+    }).start();
+}
+
+// Método de apoyo para limpiar
+private void limpiarCampos() {
+    nombrecom.setText("");
+    cellphone.setText("");
+    correo.setText("");
+    nocasas.setSelectedIndex(0);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cellphoneKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cellphoneKeyTyped
+  char c = evt.getKeyChar();
+
+    if(!Character.isDigit(c)){
+
+        evt.consume();
+
+    }        // TODO add your handling code here:
+    }//GEN-LAST:event_cellphoneKeyTyped
+
+    private void nombrecomKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombrecomKeyTyped
+ char c = evt.getKeyChar();
+
+    if(Character.isDigit(c)){
+
+        evt.consume();
+
+    }        // TODO add your handling code here:
+    }//GEN-LAST:event_nombrecomKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -205,4 +287,38 @@ public class RegistroPropietario extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> nocasas;
     private javax.swing.JTextField nombrecom;
     // End of variables declaration//GEN-END:variables
+
+public boolean validarCorreo(String correo){
+
+    String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+
+    return correo.matches(regex);
+}
+
+private void enviarCorreoVerificacion(String destino, String nombre) throws Exception {
+    final String remitente = "2021-50077@liceocanadiense.edu.gt"; 
+    final String clave = "zofh xszd czvt ucrj";
+
+    java.util.Properties props = new java.util.Properties();
+    props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.host", "smtp.gmail.com");
+    props.put("mail.smtp.port", "587");
+
+    jakarta.mail.Session session = jakarta.mail.Session.getInstance(props, new jakarta.mail.Authenticator() {
+        protected jakarta.mail.PasswordAuthentication getPasswordAuthentication() {
+            return new jakarta.mail.PasswordAuthentication(remitente, clave);
+        }
+    });
+
+    jakarta.mail.Message message = new jakarta.mail.internet.MimeMessage(session);
+    message.setFrom(new jakarta.mail.internet.InternetAddress(remitente));
+    message.setRecipients(jakarta.mail.Message.RecipientType.TO, jakarta.mail.internet.InternetAddress.parse(destino));
+    message.setSubject("Verificación de Registro - Condominio Vista Verde");
+    message.setText("Hola " + nombre + ",\n\nEste es un correo automático para verificar tu cuenta en el sistema de Vista Verde.");
+
+    jakarta.mail.Transport.send(message);
+}
+
+
 }
