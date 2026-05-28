@@ -208,44 +208,71 @@ public static void actualizarCuota(String nuevaCuota) {
 }
 
 
-    public static void asignarDuenio(String casa, String duenio) {
-        Document doc = obtenerDocumento();
+public static void registrarPropietario(String casa, String nombre, String telefono, String correo) {
+    Document doc = obtenerDocumento();
+    Element casas = (Element) doc.getElementsByTagName("casas").item(0);
+    NodeList listaCasas = doc.getElementsByTagName("casa");
 
-        Element casas = (Element) doc.getElementsByTagName("casas").item(0);
-        NodeList listaCasas = doc.getElementsByTagName("casa");
+    Element casaElemento = null;
 
-        boolean encontrada = false;
+    // Buscar si la casa ya existe
+    for (int i = 0; i < listaCasas.getLength(); i++) {
+        Element temp = (Element) listaCasas.item(i);
+        if (temp.getAttribute("numero").equals(casa)) {
+            casaElemento = temp;
+            break;
+        }
+    }
 
-        for (int i = 0; i < listaCasas.getLength(); i++) {
-            Element casaElemento = (Element) listaCasas.item(i);
+    // Si no existe, crear el nodo de la casa
+    if (casaElemento == null) {
+        casaElemento = doc.createElement("casa");
+        casaElemento.setAttribute("numero", casa);
+        casas.appendChild(casaElemento);
+    } else {
+        // Si existe, limpiamos los datos viejos para poner los nuevos
+        while (casaElemento.hasChildNodes()) {
+            casaElemento.removeChild(casaElemento.getFirstChild());
+        }
+    }
 
-            if (casaElemento.getAttribute("numero").equals(casa)) {
-                NodeList duenios = casaElemento.getElementsByTagName("duenio");
+    // Agregar/Actualizar datos del propietario
+    Element prop = doc.createElement("propietario");
+    
+    Element elNombre = doc.createElement("nombre");
+    elNombre.setTextContent(nombre);
+    prop.appendChild(elNombre);
 
-                if (duenios.getLength() > 0) {
-                    duenios.item(0).setTextContent(duenio);
-                } else {
-                    Element duenioElemento = doc.createElement("duenio");
-                    duenioElemento.setTextContent(duenio);
-                    casaElemento.appendChild(duenioElemento);
-                }
+    Element elTel = doc.createElement("telefono");
+    elTel.setTextContent(telefono);
+    prop.appendChild(elTel);
 
-                encontrada = true;
-                break;
+    Element elCorreo = doc.createElement("correo");
+    elCorreo.setTextContent(correo);
+    prop.appendChild(elCorreo);
+
+    casaElemento.appendChild(prop);
+    guardarDocumento(doc);
+}
+
+public static String[] obtenerDatosPropietario(String numeroCasa) {
+    Document doc = obtenerDocumento();
+    NodeList listaCasas = doc.getElementsByTagName("casa");
+
+    for (int i = 0; i < listaCasas.getLength(); i++) {
+        Element casa = (Element) listaCasas.item(i);
+        if (casa.getAttribute("numero").equals(numeroCasa)) {
+            NodeList propList = casa.getElementsByTagName("propietario");
+            if (propList.getLength() > 0) {
+                Element prop = (Element) propList.item(0);
+                String nombre = prop.getElementsByTagName("nombre").item(0).getTextContent();
+                String correo = prop.getElementsByTagName("correo").item(0).getTextContent();
+                return new String[]{nombre, correo}; // Retorna ambos datos
             }
         }
-
-        if (!encontrada) {
-            Element nuevaCasa = doc.createElement("casa");
-            nuevaCasa.setAttribute("numero", casa);
-
-            Element duenioElemento = doc.createElement("duenio");
-            duenioElemento.setTextContent(duenio);
-
-            nuevaCasa.appendChild(duenioElemento);
-            casas.appendChild(nuevaCasa);
-        }
-
-        guardarDocumento(doc);
     }
+    return null; // Si no encuentra dueño
+}
+
+
 }
