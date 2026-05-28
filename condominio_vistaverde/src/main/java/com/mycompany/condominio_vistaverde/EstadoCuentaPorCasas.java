@@ -255,126 +255,89 @@ private void configurarTablas(){
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-        String casaSeleccionada =
-        cmbCasa.getSelectedItem().toString();
+     String casaSeleccionada = cmbCasa.getSelectedItem().toString(); // Ej: "1"
+    String casaFormatoXML = "CASA " + casaSeleccionada; // Ej: "CASA 1"
 
-Document doc = BDXML.obtenerDocumento();
+    Document doc = BDXML.obtenerDocumento();
 
-// TABLAS
-DefaultTableModel modeloPagados =
-        (DefaultTableModel) tblPagados.getModel();
+    // MODELOS DE TABLA
+    DefaultTableModel modeloPagados = (DefaultTableModel) tblPagados.getModel();
+    DefaultTableModel modeloPendientes = (DefaultTableModel) tblPendientes.getModel();
 
-DefaultTableModel modeloPendientes =
-        (DefaultTableModel) tblPendientes.getModel();
+    modeloPagados.setRowCount(0);
+    modeloPendientes.setRowCount(0);
 
-modeloPagados.setRowCount(0);
-modeloPendientes.setRowCount(0);
+    // LIMPIAR CAMPOS
+    txtPropietario.setText("");
+    txtTotal.setText("");
 
-// LIMPIAR
-txtPropietario.setText("");
-txtTotal.setText("");
+    // --- 1. BUSCAR NOMBRE DEL DUEÑO ---
+    NodeList listaCasas = doc.getElementsByTagName("casa");
+    for (int i = 0; i < listaCasas.getLength(); i++) {
+        Element casa = (Element) listaCasas.item(i);
+        
+        // El número está en el atributo "numero" según el BDXML.registrarPropietario
+        if (casa.getAttribute("numero").equals(casaFormatoXML)) {
+            NodeList propietarios = casa.getElementsByTagName("propietario");
+            if (propietarios.getLength() > 0) {
+                Element prop = (Element) propietarios.item(0);
+                String nombre = prop.getElementsByTagName("nombre").item(0).getTextContent();
+                txtPropietario.setText(nombre);
+            } else {
+                txtPropietario.setText("Sin propietario");
+            }
+            break;
+        }
+    }
 
-// BUSCAR DUEÑO
-NodeList listaCasas =
-        doc.getElementsByTagName("casa");
+    // --- 2. LOGICA DE MESES PAGADOS ---
+    String[] meses = {
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    };
 
-for (int i = 0; i < listaCasas.getLength(); i++) {
+    boolean[] pagados = new boolean[12];
+    double totalRecaudado = 0;
 
-    Element casa =
-            (Element) listaCasas.item(i);
+    NodeList listaPagos = doc.getElementsByTagName("pago");
 
-    NodeList numeros =
-            casa.getElementsByTagName("numero");
+    for (int i = 0; i < listaPagos.getLength(); i++) {
+        Element pago = (Element) listaPagos.item(i);
+        
+        // Obtenemos el texto del tag <casa> dentro de <pago>
+        String casaXML = pago.getElementsByTagName("casa").item(0).getTextContent();
 
-    if (numeros.getLength() > 0) {
+        if (casaXML.equals(casaFormatoXML)) {
+            String mes = pago.getElementsByTagName("mes").item(0).getTextContent();
+            String año = pago.getElementsByTagName("año").item(0).getTextContent();
+            String cuota = pago.getElementsByTagName("cuota").item(0).getTextContent();
 
-        String numeroCasa =
-                numeros.item(0).getTextContent();
+            // Marcar como pagado para la tabla de pendientes
+            for (int j = 0; j < meses.length; j++) {
+                if (meses[j].equalsIgnoreCase(mes)) {
+                    pagados[j] = true;
+                    break;
+                }
+            }
 
-        if (numeroCasa.equals(casaSeleccionada)) {
-
-            NodeList duenios =
-                    casa.getElementsByTagName("duenio");
-
-            if (duenios.getLength() > 0) {
-
-                txtPropietario.setText(
-                        duenios.item(0).getTextContent()
-                );
+            modeloPagados.addRow(new Object[]{mes, año});
+            
+            try {
+                totalRecaudado += Double.parseDouble(cuota);
+            } catch (NumberFormatException e) {
+                System.out.println("Error en cuota: " + cuota);
             }
         }
     }
-}
 
-// MESES
-String[] meses = {
-    "Enero", "Febrero", "Marzo",
-    "Abril", "Mayo", "Junio",
-    "Julio", "Agosto", "Septiembre",
-    "Octubre", "Noviembre", "Diciembre"
-};
-
-boolean[] pagados = new boolean[12];
-
-double total = 0;
-
-NodeList listaPagos =
-        doc.getElementsByTagName("pago");
-
-for (int i = 0; i < listaPagos.getLength(); i++) {
-
-    Element pago =
-            (Element) listaPagos.item(i);
-
-    String casaXML =
-    pago.getElementsByTagName("casa")
-        .item(0).getTextContent();
-
-System.out.println(casaXML);
-
-    if (casaXML.equals("CASA " + casaSeleccionada)) {
-
-        String mes =
-                pago.getElementsByTagName("mes")
-                        .item(0).getTextContent();
-
-        String año =
-                pago.getElementsByTagName("año")
-                        .item(0).getTextContent();
-
-        String cuota =
-                pago.getElementsByTagName("cuota")
-                        .item(0).getTextContent();
-
-        for (int j = 0; j < meses.length; j++) {
-
-            if (meses[j].equals(mes)) {
-
-                pagados[j] = true;
-            }
+    // --- 3. LOGICA DE MESES PENDIENTES ---
+    for (int i = 0; i < meses.length; i++) {
+        if (!pagados[i]) {
+            modeloPendientes.addRow(new Object[]{meses[i], "2026"});
         }
-
-        modeloPagados.addRow(
-                new Object[]{mes, año}
-        );
-
-        total += Double.parseDouble(cuota);
     }
-}
 
-// PENDIENTES
-for (int i = 0; i < meses.length; i++) {
-
-    if (!pagados[i]) {
-
-        modeloPendientes.addRow(
-                new Object[]{meses[i], "2026"}
-        );
-    }
-}
-
-txtTotal.setText("Q" + total);
+    txtTotal.setText("Q. " + String.format("%.2f", totalRecaudado));
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
